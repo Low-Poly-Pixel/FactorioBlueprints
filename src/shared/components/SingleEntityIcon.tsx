@@ -1,22 +1,22 @@
-import type { SyntheticEvent } from 'react'
+import type { SyntheticEvent } from 'react';
 
-import type { ResolvedBlueprintIcon } from '../blueprint/icons'
+import type { ResolvedBlueprintIcon } from '../blueprint/icons';
 
 const gridPositionByIndex: Record<number, string> = {
   1: 'col-start-1 row-start-1',
   2: 'col-start-2 row-start-1',
   3: 'col-start-1 row-start-2',
   4: 'col-start-2 row-start-2',
-}
+};
 
 const hideOnError = (event: SyntheticEvent<HTMLImageElement>) => {
-  event.currentTarget.style.visibility = 'hidden'
-}
+  event.currentTarget.style.visibility = 'hidden';
+};
 
 type SingleEntityIconProps = {
-  icon: ResolvedBlueprintIcon
-  fillSlot: boolean
-}
+  icon: ResolvedBlueprintIcon;
+  fillSlot: boolean;
+};
 
 export const SingleEntityIcon = ({ icon, fillSlot }: SingleEntityIconProps) =>
   fillSlot ? (
@@ -39,4 +39,4 @@ export const SingleEntityIcon = ({ icon, fillSlot }: SingleEntityIconProps) =>
         src={icon.url}
       />
     </div>
-  )
+  );

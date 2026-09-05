@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react'
+import type { ComponentProps } from 'react';
 
 export const GearIcon = (props: ComponentProps<'svg'>) => (
   <svg
@@ -15,4 +15,4 @@ export const GearIcon = (props: ComponentProps<'svg'>) => (
       fillRule="evenodd"
     />
   </svg>
-)
+);

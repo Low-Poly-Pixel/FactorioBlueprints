@@ -1,6 +1,5 @@
-import { ArrowLeft } from 'lucide-react'
-
-import { Button } from '../../shared/components/shadcn/button'
+import { ArrowLeft } from 'lucide-react';
+import { Button } from '../../shared/components/shadcn/button';
 import {
   Dialog,
   DialogClose,
@@ -8,15 +7,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../shared/components/shadcn/dialog'
-import { outlineAccentButtonClassName } from './outlineAccentButtonClassName'
+} from '../../shared/components/shadcn/dialog';
+import { outlineAccentButtonClassName } from './outlineAccentButtonClassName';
 
 type ViewRawStringButtonProps = {
-  exportString: string
-}
+  exportString: string;
+};
 
 // No transition on these two, per direct request — unlike Back to search.
-const outlineButtonClassName = `${outlineAccentButtonClassName} transition-none`
+const outlineButtonClassName = `${outlineAccentButtonClassName} transition-none`;
 
 export const ViewRawStringButton = ({
   exportString,
@@ -46,4 +45,4 @@ export const ViewRawStringButton = ({
       </DialogClose>
     </DialogContent>
   </Dialog>
-)
+);

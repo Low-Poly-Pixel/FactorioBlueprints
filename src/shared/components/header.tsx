@@ -1,8 +1,8 @@
-import { Link } from '@tanstack/react-router'
-import { Landmark } from 'lucide-react'
+import { Link } from '@tanstack/react-router';
+import { Landmark } from 'lucide-react';
 
-import { GearIcon } from './icons/gear'
-import { Button } from './shadcn/button'
+import { GearIcon } from './icons/gear';
+import { Button } from './shadcn/button';
 
 export const Header = () => (
   <header className="relative flex items-center justify-between overflow-hidden px-6 py-4 shadow-[0_1px_0_0_var(--border)]">
@@ -21,4 +21,4 @@ export const Header = () => (
     </Link>
     <Button>Post a Blueprint</Button>
   </header>
-)
+);

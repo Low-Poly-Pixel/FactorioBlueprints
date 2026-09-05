@@ -1,15 +1,15 @@
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import { createFileRoute, notFound } from '@tanstack/react-router';
 
-import { BlueprintDetailPage } from '../features/detail/BlueprintDetailPage'
-import { getBlueprintDetail } from '../features/detail/getBlueprintDetail'
+import { BlueprintDetailPage } from '../features/detail/BlueprintDetailPage';
+import { getBlueprintDetail } from '../features/detail/getBlueprintDetail';
 
 export const Route = createFileRoute('/blueprints/$id')({
   loader: async ({ params }) => {
-    const blueprint = await getBlueprintDetail({ data: params.id })
+    const blueprint = await getBlueprintDetail({ data: params.id });
     if (!blueprint) {
-      throw notFound()
+      throw notFound();
     }
-    return blueprint
+    return blueprint;
   },
   component: () => <BlueprintDetailPage blueprint={Route.useLoaderData()} />,
-})
+});

@@ -1,7 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 
-import { BrowsePage } from '../features/browse/BrowsePage'
-import { searchBlueprintsQueryOptions } from '../features/browse/searchBlueprints'
+import { BrowsePage } from '../features/browse/BrowsePage';
+import { searchBlueprintsQueryOptions } from '../features/browse/searchBlueprints';
 
 export const Route = createFileRoute('/')({
   loader: ({ context: { queryClient } }) =>
@@ -10,4 +10,4 @@ export const Route = createFileRoute('/')({
       staleTime: 'static',
     }),
   component: BrowsePage,
-})
+});

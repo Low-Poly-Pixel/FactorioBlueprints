@@ -2,24 +2,24 @@ import type {
   BlueprintIcon,
   BlueprintTreeNode,
   EntityKind,
-} from './exportStringDecoder.ts'
+} from './exportStringDecoder.ts';
 
 export type ResolvedBlueprintIcon = {
-  name: string
-  url: string
-  index: number
-}
+  name: string;
+  url: string;
+  index: number;
+};
 
 export type ResolvedBlueprintTreeNode = {
-  entityKind: EntityKind
-  title: string
-  icons: ResolvedBlueprintIcon[]
-  children: ResolvedBlueprintTreeNode[]
-  exportString: string
-}
+  entityKind: EntityKind;
+  title: string;
+  icons: ResolvedBlueprintIcon[];
+  children: ResolvedBlueprintTreeNode[];
+  exportString: string;
+};
 
 const CDN_BASE =
-  'https://cdn.jsdelivr.net/gh/deniszholob/icons-factorio@main/factorio-icons'
+  'https://cdn.jsdelivr.net/gh/deniszholob/icons-factorio@main/factorio-icons';
 
 // The tool item's own icon, always in the base-game set (blueprint/book/
 // planner items have existed since before Space Age) — used as the base
@@ -29,7 +29,7 @@ export const entityKindIconUrls: Record<EntityKind, string> = {
   blueprint_book: `${CDN_BASE}/base/icons/blueprint-book.png`,
   upgrade_planner: `${CDN_BASE}/base/icons/upgrade-planner.png`,
   deconstruction_planner: `${CDN_BASE}/base/icons/deconstruction-planner.png`,
-}
+};
 
 // MediaWiki sentence case: only the first word is capitalized, the rest
 // stay lowercase, joined by underscores (e.g. "assembling-machine-1" ->
@@ -40,33 +40,33 @@ const toWikiName = (name: string): string =>
     .map((word, index) =>
       index === 0 ? `${word[0].toUpperCase()}${word.slice(1)}` : word,
     )
-    .join('_')
+    .join('_');
 
 const cdnIconPath = (icon: BlueprintIcon): string =>
-  icon.type === 'virtual' ? `signal/${icon.name}` : icon.name
+  icon.type === 'virtual' ? `signal/${icon.name}` : icon.name;
 
 // Ordered fallback chain: the community CDN's base-game set, then its
 // Space Age set (some signals, like the non-Nauvis planets, only exist
 // there), then the wiki as a last resort per ADR-0001.
 export const getIconCandidateUrls = (icon: BlueprintIcon): string[] => {
-  const path = cdnIconPath(icon)
-  const wikiName = toWikiName(icon.name)
+  const path = cdnIconPath(icon);
+  const wikiName = toWikiName(icon.name);
 
   return [
     `${CDN_BASE}/base/icons/${path}.png`,
     `${CDN_BASE}/space-age/icons/${path}.png`,
     `https://wiki.factorio.com/images/thumb/${wikiName}.png/64px-${wikiName}.png`,
-  ]
-}
+  ];
+};
 
 const urlExists = async (url: string): Promise<boolean> => {
   try {
-    const response = await fetch(url, { method: 'HEAD', redirect: 'follow' })
-    return response.ok
+    const response = await fetch(url, { method: 'HEAD', redirect: 'follow' });
+    return response.ok;
   } catch {
-    return false
+    return false;
   }
-}
+};
 
 // Checks each candidate in order and returns the first that actually
 // resolves. Meant to run once at ingest/seed time (blueprints are
@@ -78,12 +78,12 @@ export const resolveIconUrl = async (
 ): Promise<ResolvedBlueprintIcon | null> => {
   for (const url of getIconCandidateUrls(icon)) {
     if (await urlExists(url)) {
-      return { name: icon.name, url, index: icon.index }
+      return { name: icon.name, url, index: icon.index };
     }
   }
 
-  return null
-}
+  return null;
+};
 
 // Recursively resolves every icon at every depth of a blueprint book's
 // contents tree. Same immutable/ingest-time reasoning as resolveIconUrl —
@@ -101,9 +101,9 @@ export const resolveTreeIcons = async (
   const [icons, children] = await Promise.all([
     Promise.all(node.icons.map((icon) => resolveIconUrl(icon))),
     Promise.all(node.children.map((child) => resolveTreeIcons(child))),
-  ])
+  ]);
 
-  const resolvedIcons = icons.filter((icon) => icon !== null)
+  const resolvedIcons = icons.filter((icon) => icon !== null);
 
   return {
     entityKind: node.entityKind,
@@ -112,5 +112,5 @@ export const resolveTreeIcons = async (
       resolvedIcons.length > 0 ? resolvedIcons : (children[0]?.icons ?? []),
     children,
     exportString: node.exportString,
-  }
-}
+  };
+};

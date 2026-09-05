@@ -1,22 +1,26 @@
-import { Link } from '@tanstack/react-router'
-import { ArrowLeft } from 'lucide-react'
+import { Link } from '@tanstack/react-router';
+import { ArrowLeft } from 'lucide-react';
 
-import type { ResolvedBlueprintTreeNode } from '../../shared/blueprint/icons'
-import { BlueprintSummaryCard } from '../../shared/components/BlueprintSummaryCard'
-import { PageContainer } from '../../shared/components/PageContainer'
-import { Button } from '../../shared/components/shadcn/button'
-import { BlueprintTree } from './BlueprintTree'
-import { CopyBlueprintStringButton } from './CopyBlueprintStringButton'
-import type { BlueprintDetail } from './getBlueprintDetail'
-import { outlineAccentButtonClassName } from './outlineAccentButtonClassName'
-import { ViewRawStringButton } from './ViewRawStringButton'
+import type { ResolvedBlueprintTreeNode } from '../../shared/blueprint/icons';
+import { BlueprintSummaryCard } from '../../shared/components/BlueprintSummaryCard';
+import {
+  blueprintCardShellClassName,
+  getBlueprintCardViewTransitionName,
+} from '../../shared/components/blueprintCardShell';
+import { PageContainer } from '../../shared/components/PageContainer';
+import { Button } from '../../shared/components/shadcn/button';
+import { BlueprintTree } from './BlueprintTree';
+import { CopyBlueprintStringButton } from './CopyBlueprintStringButton';
+import type { BlueprintDetail } from './getBlueprintDetail';
+import { outlineAccentButtonClassName } from './outlineAccentButtonClassName';
+import { ViewRawStringButton } from './ViewRawStringButton';
 
 type BlueprintDetailPageProps = {
-  blueprint: BlueprintDetail
-}
+  blueprint: BlueprintDetail;
+};
 
-const panelClassName = 'mt-4 rounded-md bg-card p-4'
-const sectionHeadingClassName = 'font-semibold text-foreground'
+const panelClassName = 'mt-4 rounded-md bg-card p-4';
+const sectionHeadingClassName = 'font-semibold text-foreground';
 
 // A Blueprint Book's "contents" are its real entries. Every other entity
 // kind is still structurally one item, so it gets a single self-referencing
@@ -34,7 +38,7 @@ const getContentsTreeNodes = (
           icons: blueprint.icons,
           title: blueprint.title,
         },
-      ]
+      ];
 
 export const BlueprintDetailPage = ({
   blueprint,
@@ -52,8 +56,10 @@ export const BlueprintDetailPage = ({
       </Link>
     </Button>
     <div
-      className="rounded-md bg-card p-1"
-      style={{ viewTransitionName: `blueprint-card-${blueprint.id}` }}
+      className={blueprintCardShellClassName}
+      style={{
+        viewTransitionName: getBlueprintCardViewTransitionName(blueprint.id),
+      }}
     >
       <BlueprintSummaryCard blueprint={blueprint} />
     </div>
@@ -74,4 +80,4 @@ export const BlueprintDetailPage = ({
       </div>
     </div>
   </PageContainer>
-)
+);

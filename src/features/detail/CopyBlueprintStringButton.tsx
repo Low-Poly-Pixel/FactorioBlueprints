@@ -1,45 +1,48 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { Button } from '../../shared/components/shadcn/button'
-import { CopyBlueprintStringIcon } from './CopyBlueprintStringIcon'
+import { Button } from '../../shared/components/shadcn/button';
+import { CopyBlueprintStringIcon } from './CopyBlueprintStringIcon';
 
 type CopyBlueprintStringButtonProps = {
-  exportString: string
-}
+  exportString: string;
+};
 
-export type CopyState = 'idle' | 'copied' | 'failed'
+export type CopyState = 'idle' | 'copied' | 'failed';
 
-const copyStates: CopyState[] = ['idle', 'copied', 'failed']
+const copyStates: CopyState[] = ['idle', 'copied', 'failed'];
 
-const feedbackResetDelayMs = 2000
+const feedbackResetDelayMs = 2000;
 
 const labelByState: Record<CopyState, string> = {
   idle: 'Copy Blueprint String',
   copied: 'Copied!',
   failed: 'Copy failed',
-}
+};
 
-// Same green as the Upgrade Planner entity-kind color (--success).
+// copied: same green as the Upgrade Planner entity-kind color (--success).
+// failed: same red as Button's own destructive variant (--destructive) —
+// matched by hand since destructive has no text-*-foreground token of its
+// own, just literal text-white (see shadcn/button.tsx).
 const buttonClassNameByState: Record<CopyState, string> = {
   idle: '',
   copied: 'bg-success text-success-foreground hover:bg-success/90',
-  failed: '',
-}
+  failed: 'bg-destructive text-white hover:bg-destructive/90',
+};
 
 export const CopyBlueprintStringButton = ({
   exportString,
 }: CopyBlueprintStringButtonProps) => {
-  const [state, setState] = useState<CopyState>('idle')
+  const [state, setState] = useState<CopyState>('idle');
 
   const handleClick = async () => {
     try {
-      await navigator.clipboard.writeText(exportString)
-      setState('copied')
+      await navigator.clipboard.writeText(exportString);
+      setState('copied');
     } catch {
-      setState('failed')
+      setState('failed');
     }
-    setTimeout(() => setState('idle'), feedbackResetDelayMs)
-  }
+    setTimeout(() => setState('idle'), feedbackResetDelayMs);
+  };
 
   return (
     <>
@@ -66,5 +69,5 @@ export const CopyBlueprintStringButton = ({
         {state === 'failed' && 'Copying the blueprint string failed'}
       </span>
     </>
-  )
-}
+  );
+};

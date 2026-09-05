@@ -1,27 +1,27 @@
-import { TanStackDevtools } from '@tanstack/react-devtools'
-import type { QueryClient } from '@tanstack/react-query'
-import { QueryClientProvider } from '@tanstack/react-query'
+import { TanStackDevtools } from '@tanstack/react-devtools';
+import type { QueryClient } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import {
   createRootRouteWithContext,
   HeadContent,
   Scripts,
-} from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import type { ReactNode } from 'react'
+} from '@tanstack/react-router';
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
+import type { ReactNode } from 'react';
 
-import { Header } from '../shared/components/header'
-import appCss from '../styles.css?url'
+import { Header } from '../shared/components/header';
+import appCss from '../styles.css?url';
 
 type RootDocumentProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 type RouterContext = {
-  queryClient: QueryClient
-}
+  queryClient: QueryClient;
+};
 
 const RootDocument = ({ children }: RootDocumentProps) => {
-  const { queryClient } = Route.useRouteContext()
+  const { queryClient } = Route.useRouteContext();
 
   return (
     <html lang="en">
@@ -45,8 +45,8 @@ const RootDocument = ({ children }: RootDocumentProps) => {
         <Scripts />
       </body>
     </html>
-  )
-}
+  );
+};
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
@@ -71,4 +71,4 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     ],
   }),
   shellComponent: RootDocument,
-})
+});

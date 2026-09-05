@@ -1,19 +1,19 @@
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react';
 
-import type { EntityKind } from '../../shared/blueprint/exportStringDecoder'
-import type { ResolvedBlueprintIcon } from '../../shared/blueprint/icons'
-import { EntityIcons } from '../../shared/components/EntityIcons'
-import { OpenInBlueprintEditorButton } from './OpenInBlueprintEditorButton'
+import type { EntityKind } from '../../shared/blueprint/exportStringDecoder';
+import type { ResolvedBlueprintIcon } from '../../shared/blueprint/icons';
+import { EntityIcons } from '../../shared/components/EntityIcons';
+import { OpenInBlueprintEditorButton } from './OpenInBlueprintEditorButton';
 
 type BlueprintTreeNodeRowProps = {
-  entityKind: EntityKind
-  icons: ResolvedBlueprintIcon[]
-  title: string
-  hasChildren: boolean
-  hideIndent: boolean
-  isExpanded: boolean
-  exportString: string
-}
+  entityKind: EntityKind;
+  icons: ResolvedBlueprintIcon[];
+  title: string;
+  hasChildren: boolean;
+  hideIndent: boolean;
+  isExpanded: boolean;
+  exportString: string;
+};
 
 export const BlueprintTreeNodeRow = ({
   entityKind,
@@ -40,4 +40,4 @@ export const BlueprintTreeNodeRow = ({
     <EntityIcons entityKind={entityKind} icons={icons} size="tree" />
     <span className="truncate text-foreground text-sm">{title}</span>
   </div>
-)
+);

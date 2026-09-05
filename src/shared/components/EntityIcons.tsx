@@ -1,21 +1,21 @@
-import type { EntityKind } from '../blueprint/exportStringDecoder'
+import type { EntityKind } from '../blueprint/exportStringDecoder';
 import {
   entityKindIconUrls,
   type ResolvedBlueprintIcon,
-} from '../blueprint/icons'
-import { SingleEntityIcon } from './SingleEntityIcon'
+} from '../blueprint/icons';
+import { SingleEntityIcon } from './SingleEntityIcon';
 
 // 'card' backs the browse/detail summary card slot; 'tree' is the smaller
 // preset for blueprint-book tree rows. The two aren't a scaled version of
 // each other — Tailwind's px-based offsets below (inset, translate) don't
 // scale proportionally with size, so each preset carries its own hand-tuned
 // values rather than one computed from the other.
-export type EntityIconSize = 'card' | 'tree'
+export type EntityIconSize = 'card' | 'tree';
 
 const slotSizeClassBySize: Record<EntityIconSize, string> = {
   card: 'size-20',
   tree: 'size-8',
-}
+};
 
 const slotPaddingByEntityKindAndSize: Record<
   EntityIconSize,
@@ -33,24 +33,24 @@ const slotPaddingByEntityKindAndSize: Record<
     upgrade_planner: 'p-px',
     deconstruction_planner: 'p-px',
   },
-}
+};
 
 const baseIconInsetBySize: Record<EntityIconSize, string> = {
   card: 'inset-1 size-[calc(100%-0.5rem)]',
   tree: 'inset-0.5 size-[calc(100%-0.25rem)]',
-}
+};
 
 const baseIconScaleByEntityKind: Record<EntityKind, string> = {
   blueprint: '',
   blueprint_book: 'scale-[1.1]',
   upgrade_planner: '',
   deconstruction_planner: '',
-}
+};
 
 const iconGridPaddingBySize: Record<EntityIconSize, string> = {
   card: 'p-1',
   tree: 'p-0.5',
-}
+};
 
 const iconGridOffsetByEntityKindAndSize: Record<
   EntityIconSize,
@@ -68,13 +68,13 @@ const iconGridOffsetByEntityKindAndSize: Record<
     upgrade_planner: '',
     deconstruction_planner: '',
   },
-}
+};
 
 type EntityIconsProps = {
-  entityKind: EntityKind
-  icons: ResolvedBlueprintIcon[]
-  size: EntityIconSize
-}
+  entityKind: EntityKind;
+  icons: ResolvedBlueprintIcon[];
+  size: EntityIconSize;
+};
 
 export const EntityIcons = ({ entityKind, icons, size }: EntityIconsProps) => (
   <div
@@ -97,4 +97,4 @@ export const EntityIcons = ({ entityKind, icons, size }: EntityIconsProps) => (
       ))}
     </div>
   </div>
-)
+);

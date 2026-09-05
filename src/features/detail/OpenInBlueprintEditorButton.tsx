@@ -1,11 +1,11 @@
-import { ExternalLink } from 'lucide-react'
+import { ExternalLink } from 'lucide-react';
 
-import { Button } from '../../shared/components/shadcn/button'
-import { outlineAccentButtonClassName } from './outlineAccentButtonClassName'
+import { Button } from '../../shared/components/shadcn/button';
+import { outlineAccentButtonClassName } from './outlineAccentButtonClassName';
 
 type OpenInBlueprintEditorButtonProps = {
-  exportString: string
-}
+  exportString: string;
+};
 
 // The long-standing FBE (fbe.teoxoy.com) was marked unmaintained/deprecated
 // by its author. This links to its actively-maintained successor instead:
@@ -14,7 +14,7 @@ type OpenInBlueprintEditorButtonProps = {
 // starting with "0" is treated as one, no fetch involved) — verified against
 // its own source (packages/editor/src/core/bpString.ts).
 const getEditorUrl = (exportString: string): string =>
-  `https://fbe.factorygamefan.com/?source=${encodeURIComponent(exportString)}`
+  `https://fbe.factorygamefan.com/?source=${encodeURIComponent(exportString)}`;
 
 export const OpenInBlueprintEditorButton = ({
   exportString,
@@ -35,4 +35,4 @@ export const OpenInBlueprintEditorButton = ({
       <ExternalLink aria-hidden="true" />
     </a>
   </Button>
-)
+);

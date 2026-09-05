@@ -1,11 +1,11 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { PageContainer } from '../../shared/components/PageContainer'
-import { BlueprintResultCard } from './BlueprintResultCard'
-import { searchBlueprintsQueryOptions } from './searchBlueprints'
+import { PageContainer } from '../../shared/components/PageContainer';
+import { BlueprintResultCard } from './BlueprintResultCard';
+import { searchBlueprintsQueryOptions } from './searchBlueprints';
 
 export const BrowsePage = () => {
-  const { data: blueprints } = useSuspenseQuery(searchBlueprintsQueryOptions())
+  const { data: blueprints } = useSuspenseQuery(searchBlueprintsQueryOptions());
 
   return (
     <PageContainer>
@@ -15,5 +15,5 @@ export const BrowsePage = () => {
         ))}
       </ul>
     </PageContainer>
-  )
-}
+  );
+};

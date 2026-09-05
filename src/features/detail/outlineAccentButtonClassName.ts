@@ -3,4 +3,4 @@
 // constant so all three stay in sync rather than three copies of the same
 // Tailwind string drifting apart.
 export const outlineAccentButtonClassName =
-  'border-primary text-primary hover:bg-primary hover:text-primary-foreground dark:border-primary'
+  'border-primary text-primary hover:bg-primary hover:text-primary-foreground dark:border-primary';

@@ -1,10 +1,10 @@
-import type { ResolvedBlueprintTreeNode } from '../../shared/blueprint/icons'
-import { BlueprintTreeNode } from './BlueprintTreeNode'
-import { useBlueprintTreeNavigation } from './useBlueprintTreeNavigation'
+import type { ResolvedBlueprintTreeNode } from '../../shared/blueprint/icons';
+import { BlueprintTreeNode } from './BlueprintTreeNode';
+import { useBlueprintTreeNavigation } from './useBlueprintTreeNavigation';
 
 type BlueprintTreeProps = {
-  nodes: ResolvedBlueprintTreeNode[]
-}
+  nodes: ResolvedBlueprintTreeNode[];
+};
 
 export const BlueprintTree = ({ nodes }: BlueprintTreeProps) => {
   const {
@@ -14,7 +14,7 @@ export const BlueprintTree = ({ nodes }: BlueprintTreeProps) => {
     onActivate,
     registerNodeRef,
     toggleExpanded,
-  } = useBlueprintTreeNavigation(nodes)
+  } = useBlueprintTreeNavigation(nodes);
 
   return (
     <div
@@ -23,24 +23,21 @@ export const BlueprintTree = ({ nodes }: BlueprintTreeProps) => {
       onKeyDown={handleKeyDown}
       role="tree"
     >
-      {nodes.map((node, index) => {
-        const path = String(index)
-        return (
-          <BlueprintTreeNode
-            depth={1}
-            expandedPaths={expandedPaths}
-            focusedPath={focusedPath}
-            key={path}
-            node={node}
-            onActivate={onActivate}
-            onRegisterRef={registerNodeRef}
-            onToggle={toggleExpanded}
-            path={path}
-            posInSet={index + 1}
-            setSize={nodes.length}
-          />
-        )
-      })}
+      {nodes.map((node, index) => (
+        <BlueprintTreeNode
+          depth={1}
+          expandedPaths={expandedPaths}
+          focusedPath={focusedPath}
+          key={String(index)}
+          node={node}
+          onActivate={onActivate}
+          onRegisterRef={registerNodeRef}
+          onToggle={toggleExpanded}
+          path={String(index)}
+          posInSet={index + 1}
+          setSize={nodes.length}
+        />
+      ))}
     </div>
-  )
-}
+  );
+};

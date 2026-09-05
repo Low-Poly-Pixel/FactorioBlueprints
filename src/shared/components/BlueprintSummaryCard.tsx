@@ -1,39 +1,39 @@
-import type { EntityKind, GameVersion } from '../blueprint/exportStringDecoder'
-import { formatTimeSinceUpload } from '../blueprint/formatTimeSinceUpload'
-import type { ResolvedBlueprintIcon } from '../blueprint/icons'
-import { EntityIcons } from './EntityIcons'
+import type { EntityKind, GameVersion } from '../blueprint/exportStringDecoder';
+import { formatTimeSinceUpload } from '../blueprint/formatTimeSinceUpload';
+import type { ResolvedBlueprintIcon } from '../blueprint/icons';
+import { EntityIcons } from './EntityIcons';
 
 // Structural shape only — both BlueprintSummary (browse) and BlueprintDetail
 // (detail) satisfy this without needing to import from each other's feature.
 export type BlueprintCardData = {
-  title: string
-  entityKind: EntityKind
-  gameVersion: GameVersion
-  uploadedAt: number
-  author: string | null
-  icons: ResolvedBlueprintIcon[]
-}
+  title: string;
+  entityKind: EntityKind;
+  gameVersion: GameVersion;
+  uploadedAt: number;
+  author: string | null;
+  icons: ResolvedBlueprintIcon[];
+};
 
 type BlueprintSummaryCardProps = {
-  blueprint: BlueprintCardData
-}
+  blueprint: BlueprintCardData;
+};
 
 const entityKindLabels: Record<EntityKind, string> = {
   blueprint: 'Blueprint',
   blueprint_book: 'Blueprint Book',
   upgrade_planner: 'Upgrade Planner',
   deconstruction_planner: 'Deconstruction Planner',
-}
+};
 
 const entityKindTextColor: Record<EntityKind, string> = {
   blueprint: 'text-info',
   blueprint_book: 'text-info',
   upgrade_planner: 'text-success',
   deconstruction_planner: 'text-destructive',
-}
+};
 
-const metaTextClassName = 'text-muted-foreground text-sm'
-const metaHighlightClassName = 'text-primary'
+const metaTextClassName = 'text-muted-foreground text-sm';
+const metaHighlightClassName = 'text-primary';
 
 export const BlueprintSummaryCard = ({
   blueprint,
@@ -67,4 +67,4 @@ export const BlueprintSummaryCard = ({
       </p>
     </div>
   </div>
-)
+);
