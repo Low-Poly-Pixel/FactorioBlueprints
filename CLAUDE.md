@@ -11,6 +11,8 @@ React via TanStack Start on Vite, deployed to Cloudflare Workers, D1 as the only
 - `strict: true`, no exceptions.
 - Use `type` for everything in application code — props, state shapes, function signatures. Use `interface` only when you must merge into a declaration you don't own: TanStack Router's `Register` (required to wire up a typed router), and possibly Cloudflare's generated `Env` binding type (`wrangler types`). If you're not merging into someone else's type, it's `type`.
 - No `React.FC`. Type props directly on the function signature: `const Foo = ({ bar }: FooProps) => (...)`. Generic components use the `<T,>` trailing-comma form in `.tsx` files (plain `<T>` is ambiguous with JSX).
+- Avoid type assertions (`as X`). An assertion tells the compiler to trust you with no runtime check behind it — if you're ever wrong, it fails silently instead of erroring where the bad data actually entered. If one is genuinely unavoidable, a comment must explain why (not just what). Not Biome-enforced — `noExplicitAny` catches `any` but not `as SomeSpecificType`, so this one is on us to hold ourselves to.
+- Validate data at the boundary where it enters the app — a user-uploaded blueprint string, or any future external API call — with a Zod schema, rather than trusting `any`/an assertion past that point. See `src/shared/blueprint/decode.ts` for the pattern: the raw decoded JSON is Zod-validated once, and entity-kind narrowing afterward uses `in` checks on the now-typed result, not a cast.
 
 ## Components
 
@@ -31,7 +33,7 @@ React via TanStack Start on Vite, deployed to Cloudflare Workers, D1 as the only
 
 - `routes/` — TanStack Router route files only, kept thin: each one imports its actual component/logic from `features/` rather than containing it.
 - `features/<name>/` — anything used by exactly one feature, colocated (component, hook, test together).
-- `shared/` — anything used by two or more features, promoted the moment a second feature needs it. shadcn/ui's generated primitives live in `shared/components/ui/`, since that's where its CLI drops them.
+- `shared/` — anything used by two or more features, promoted the moment a second feature needs it. shadcn/ui's generated primitives live in `shared/components/shadcn/` (see that folder's own README) — kept out of `shared/components/` proper and out of `ui/`'s generic naming so it reads unmistakably as CLI-generated, not hand-authored.
 - No tool-enforced import boundaries between features (a `dependency-cruiser` config exists in this repo's skill templates and was deliberately not wired up here) — this project is solo-developer and four features wide, which is too small for that machinery to earn its cost. Revisit if the team or codebase grows.
 
 ## State
@@ -48,3 +50,6 @@ React via TanStack Start on Vite, deployed to Cloudflare Workers, D1 as the only
 
 - shadcn/ui: Radix UI primitives + Tailwind, generated into the repo via its CLI (not an opaque installed dependency) — chosen for WCAG-correct behavior (focus management, keyboard nav, ARIA) out of the box. See [ADR-0005](docs/adr/0005-shadcn-dark-mode-only.md).
 - Dark mode only for V1 — no light-mode toggle.
+- Corners: slight rounding via one `--radius` CSS variable, applied everywhere through shadcn's derived `rounded-*` tokens — don't override per component. See [ADR-0010](docs/adr/0010-sharp-corners.md).
+- No borders anywhere except the header's bottom divider — panels/cards read as distinct surfaces via `bg-card` background contrast, not outlines. See [ADR-0013](docs/adr/0013-no-borders-except-header.md).
+- See [docs/style-guide.md](docs/style-guide.md) for the current visual conventions as they get settled.

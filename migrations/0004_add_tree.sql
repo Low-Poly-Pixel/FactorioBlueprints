@@ -1,0 +1,3 @@
+-- Migration number: 0004 	 2026-09-05T17:15:47.078Z
+
+ALTER TABLE blueprints ADD COLUMN tree TEXT NOT NULL DEFAULT '[]';
