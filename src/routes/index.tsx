@@ -13,6 +13,14 @@ import { getVersionFilterFromSearch } from '../features/browse/versionFilter';
 // shared/blueprint/rawPayloadSchema.ts for the same Zod-at-the-boundary
 // pattern applied to blueprint uploads.
 const browseSearchSchema = z.object({
+  entityKind: z
+    .enum([
+      'blueprint',
+      'blueprint_book',
+      'upgrade_planner',
+      'deconstruction_planner',
+    ])
+    .optional(),
   q: z.string().optional(),
   versionExact: z.boolean().optional(),
   versionMajor: z.number().int().optional(),
@@ -30,6 +38,7 @@ export const Route = createFileRoute('/')({
     Promise.all([
       queryClient.query({
         ...searchBlueprintsQueryOptions({
+          entityKind: deps.search.entityKind,
           query: deps.search.q ?? '',
           version: getVersionFilterFromSearch(deps.search),
         }),

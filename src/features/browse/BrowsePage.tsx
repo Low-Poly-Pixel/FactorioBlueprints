@@ -3,6 +3,7 @@ import { useSearch } from '@tanstack/react-router';
 
 import { PageContainer } from '../../shared/components/PageContainer';
 import { BlueprintResultCard } from './BlueprintResultCard';
+import { BrowseEntityKindFilter } from './BrowseEntityKindFilter';
 import { BrowseSearchInput } from './BrowseSearchInput';
 import { BrowseVersionFilter } from './BrowseVersionFilter';
 import {
@@ -15,6 +16,7 @@ export const BrowsePage = () => {
   const search = useSearch({ from: '/' });
   const { data: blueprints } = useSuspenseQuery(
     searchBlueprintsQueryOptions({
+      entityKind: search.entityKind,
       query: search.q ?? '',
       version: getVersionFilterFromSearch(search),
     }),
@@ -25,8 +27,9 @@ export const BrowsePage = () => {
 
   return (
     <PageContainer>
-      <div className="flex gap-3">
+      <div className="flex items-center gap-2">
         <BrowseSearchInput />
+        <BrowseEntityKindFilter />
         <BrowseVersionFilter availableVersions={availableVersions} />
       </div>
       <ul className="mt-4 flex flex-col gap-3">

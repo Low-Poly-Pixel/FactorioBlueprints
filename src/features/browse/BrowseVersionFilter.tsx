@@ -2,12 +2,13 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 
 import { Checkbox } from '../../shared/components/shadcn/checkbox';
 import { Label } from '../../shared/components/shadcn/label';
+import { FilterSelectField } from './FilterSelectField';
 import type { AvailableGameVersion } from './searchBlueprints';
-import { VersionSelectField } from './VersionSelectField';
 import {
-  getAvailableMajors,
-  getAvailableMinors,
+  decodeVersionLine,
+  encodeVersionLine,
   getAvailablePatches,
+  versionLineOptions,
 } from './versionFilter';
 
 type BrowseVersionFilterProps = {
@@ -23,45 +24,44 @@ export const BrowseVersionFilter = ({
   const setSearch = (changes: Partial<typeof search>) =>
     navigate({ search: (previous) => ({ ...previous, ...changes }) });
 
+  const versionLineValue =
+    search.versionMajor === undefined
+      ? undefined
+      : encodeVersionLine(search.versionMajor, search.versionMinor ?? 0);
+
   return (
-    <div className="flex items-center gap-2">
-      <VersionSelectField
+    <>
+      <FilterSelectField
         anyLabel="Any version"
         ariaLabel="Filter by version"
-        onChange={(versionMajor) =>
+        onChange={(value) => {
+          const decoded = value ? decodeVersionLine(value) : undefined;
           setSearch({
-            versionMajor,
-            versionMinor: undefined,
+            versionMajor: decoded?.major,
+            versionMinor: decoded?.minor,
             versionPatch: undefined,
-          })
-        }
-        options={getAvailableMajors(availableVersions)}
+          });
+        }}
+        options={versionLineOptions}
         placeholder="Version"
-        value={search.versionMajor}
+        value={versionLineValue}
+        widthClassName="w-36"
       />
-      <VersionSelectField
-        anyLabel="Any sub-version"
-        ariaLabel="Filter by sub-version"
-        disabled={search.versionMajor === undefined}
-        onChange={(versionMinor) =>
-          setSearch({ versionMinor, versionPatch: undefined })
-        }
-        options={getAvailableMinors(availableVersions, search.versionMajor)}
-        placeholder="Sub-version"
-        value={search.versionMinor}
-      />
-      <VersionSelectField
+      <FilterSelectField
         anyLabel="Any patch"
         ariaLabel="Filter by patch version"
-        disabled={search.versionMinor === undefined}
-        onChange={(versionPatch) => setSearch({ versionPatch })}
+        disabled={search.versionMajor === undefined}
+        onChange={(value) =>
+          setSearch({ versionPatch: value ? Number(value) : undefined })
+        }
         options={getAvailablePatches(
           availableVersions,
           search.versionMajor,
           search.versionMinor,
-        )}
+        ).map((patch) => ({ label: String(patch), value: String(patch) }))}
         placeholder="Patch"
-        value={search.versionPatch}
+        value={search.versionPatch?.toString()}
+        widthClassName="w-32"
       />
       <div className="flex items-center gap-2">
         <Checkbox
@@ -79,6 +79,6 @@ export const BrowseVersionFilter = ({
           Exact
         </Label>
       </div>
-    </div>
+    </>
   );
 };

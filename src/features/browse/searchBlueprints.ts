@@ -36,6 +36,8 @@ type BlueprintRow = {
   icons: string;
 };
 
+// Most recent upload first — the default and, per direct request, the rule
+// whenever there's no title search to imply any other relevance ordering.
 const selectBlueprintsSql =
   'SELECT id, title, description, author, created_at, entity_kind, game_version_major, game_version_minor, game_version_patch, game_version_dev, icons FROM blueprints';
 
@@ -47,6 +49,7 @@ export type VersionFilter = {
 };
 
 type SearchBlueprintsInput = {
+  entityKind?: EntityKind;
   query: string;
   version?: VersionFilter;
 };
@@ -105,11 +108,15 @@ export const searchBlueprints = createServerFn({ method: 'GET' })
       conditions.push(versionCondition.sql);
       params.push(...versionCondition.params);
     }
+    if (input.entityKind) {
+      conditions.push('entity_kind = ?');
+      params.push(input.entityKind);
+    }
 
     const sql =
       conditions.length > 0
-        ? `${selectBlueprintsSql} WHERE ${conditions.join(' AND ')}`
-        : selectBlueprintsSql;
+        ? `${selectBlueprintsSql} WHERE ${conditions.join(' AND ')} ORDER BY created_at DESC`
+        : `${selectBlueprintsSql} ORDER BY created_at DESC`;
 
     const { results } = await env.DB.prepare(sql)
       .bind(...params)
@@ -142,6 +149,7 @@ export const searchBlueprintsQueryOptions = (input: SearchBlueprintsInput) =>
       input.version?.minor,
       input.version?.patch,
       input.version?.exact,
+      input.entityKind,
     ],
     queryFn: () => searchBlueprints({ data: input }),
   });

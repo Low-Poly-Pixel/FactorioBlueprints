@@ -1,3 +1,5 @@
+import type { FilterSelectOption } from './FilterSelectField';
+import { FACTORIO_VERSION_LINES } from './factorioVersionLines';
 import type { AvailableGameVersion, VersionFilter } from './searchBlueprints';
 
 export type VersionSearchParams = {
@@ -26,24 +28,33 @@ export const getVersionFilterFromSearch = (
   };
 };
 
+// Major and minor are combined into one dropdown value ("2.1") — Factorio
+// has too few of either individually to justify two separate dropdowns.
+// See factorioVersionLines.ts for the recorded list this is built from.
+export const encodeVersionLine = (major: number, minor: number): string =>
+  `${major}.${minor}`;
+
+export const decodeVersionLine = (
+  value: string,
+): { major: number; minor: number } => {
+  const [major, minor] = value.split('.').map(Number);
+  return { major, minor };
+};
+
+export const versionLineOptions: FilterSelectOption[] = [
+  ...FACTORIO_VERSION_LINES,
+]
+  // Newest first, matching the "filter to this version or later" default.
+  .sort(([aMajor, aMinor], [bMajor, bMinor]) =>
+    aMajor === bMajor ? bMinor - aMinor : bMajor - aMajor,
+  )
+  .map(([major, minor]) => {
+    const label = encodeVersionLine(major, minor);
+    return { label, value: label };
+  });
+
 const getUniqueSorted = (values: number[]): number[] =>
   [...new Set(values)].sort((a, b) => b - a);
-
-export const getAvailableMajors = (
-  versions: AvailableGameVersion[],
-): number[] => getUniqueSorted(versions.map((version) => version.major));
-
-export const getAvailableMinors = (
-  versions: AvailableGameVersion[],
-  major: number | undefined,
-): number[] =>
-  major === undefined
-    ? []
-    : getUniqueSorted(
-        versions
-          .filter((version) => version.major === major)
-          .map((version) => version.minor),
-      );
 
 export const getAvailablePatches = (
   versions: AvailableGameVersion[],
