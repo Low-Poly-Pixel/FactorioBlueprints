@@ -7,12 +7,12 @@ import {
 import { FilterSelectField } from './FilterSelectField';
 
 // Object.entries() always widens keys to string, even though fallbackTitles
-// is a Record<EntityKind, string> — a known TS stdlib typing gap, not
-// unvalidated data (the object literal itself is ours and exhaustive), so
-// this narrows back safely rather than trusting arbitrary input.
-const entityKindOptions = (
-  Object.entries(fallbackTitles) as [EntityKind, string][]
-).map(([value, label]) => ({ label, value }));
+// is a Record<EntityKind, string> — a known TS stdlib typing gap. Narrowed
+// with the same isEntityKind guard used on the URL-read side, rather than
+// asserting the gap away.
+const entityKindOptions = Object.entries(fallbackTitles)
+  .filter((entry): entry is [EntityKind, string] => isEntityKind(entry[0]))
+  .map(([value, label]) => ({ label, value }));
 
 export const BrowseEntityKindFilter = () => {
   const { entityKind } = useSearch({ from: '/' });
