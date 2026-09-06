@@ -1,9 +1,7 @@
-import type { ResolvedBlueprintTreeNode } from '../../shared/blueprint/icons';
-import {
-  Collapsible,
-  CollapsibleContent,
-} from '../../shared/components/shadcn/collapsible';
+import type { ResolvedBlueprintTreeNode } from '@/shared/blueprint/icons';
+import { Collapsible } from '@/shared/components/shadcn/collapsible';
 import { BlueprintTreeNodeChildren } from './BlueprintTreeNodeChildren';
+import { BlueprintTreeNodeCollapsibleContent } from './BlueprintTreeNodeCollapsibleContent';
 import { BlueprintTreeNodeRow } from './BlueprintTreeNodeRow';
 
 type BlueprintTreeNodeProps = {
@@ -41,6 +39,19 @@ export const BlueprintTreeNode = ({
   const hasChildren = node.children.length > 0;
   const isExpanded = hasChildren && expandedPaths.has(path);
   const isSoloLeaf = isSoloLeafNode(depth, setSize, hasChildren);
+  const isRoot = depth === 1;
+  const children = hasChildren && (
+    <BlueprintTreeNodeChildren
+      depth={depth}
+      expandedPaths={expandedPaths}
+      focusedPath={focusedPath}
+      nodes={node.children}
+      onActivate={onActivate}
+      onRegisterRef={onRegisterRef}
+      onToggle={onToggle}
+      parentPath={path}
+    />
+  );
 
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: keyboard activation (Enter/Space/arrow keys) is handled by the ancestor role="tree" element's onKeyDown, not a listener on this row itself
@@ -74,18 +85,12 @@ export const BlueprintTreeNode = ({
           title={node.title}
         />
         {hasChildren && (
-          <CollapsibleContent>
-            <BlueprintTreeNodeChildren
-              depth={depth}
-              expandedPaths={expandedPaths}
-              focusedPath={focusedPath}
-              nodes={node.children}
-              onActivate={onActivate}
-              onRegisterRef={onRegisterRef}
-              onToggle={onToggle}
-              parentPath={path}
-            />
-          </CollapsibleContent>
+          <BlueprintTreeNodeCollapsibleContent
+            isExpanded={isExpanded}
+            isRoot={isRoot}
+          >
+            {children}
+          </BlueprintTreeNodeCollapsibleContent>
         )}
       </Collapsible>
     </div>

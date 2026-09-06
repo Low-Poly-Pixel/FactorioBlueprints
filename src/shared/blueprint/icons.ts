@@ -18,7 +18,7 @@ export type ResolvedBlueprintTreeNode = {
   exportString: string;
 };
 
-const CDN_BASE =
+export const CDN_BASE =
   'https://cdn.jsdelivr.net/gh/deniszholob/icons-factorio@main/factorio-icons';
 
 // The tool item's own icon, always in the base-game set (blueprint/book/
@@ -34,7 +34,7 @@ export const entityKindIconUrls: Record<EntityKind, string> = {
 // MediaWiki sentence case: only the first word is capitalized, the rest
 // stay lowercase, joined by underscores (e.g. "assembling-machine-1" ->
 // "Assembling_machine_1").
-const toWikiName = (name: string): string =>
+export const toWikiName = (name: string): string =>
   name
     .split('-')
     .map((word, index) =>
@@ -42,20 +42,42 @@ const toWikiName = (name: string): string =>
     )
     .join('_');
 
+// Virtual signal images use a different wiki convention than regular
+// items — the hyphen between "signal" and its letter/word is kept, not
+// converted to an underscore, and later segments keep their original
+// casing rather than being lowercased (confirmed against the wiki's own
+// image URL: "signal-V" -> "Signal-V.png", not "Signal_v.png").
+export const toWikiSignalName = (name: string): string =>
+  name
+    .split('-')
+    .map((word, index) =>
+      index === 0 ? `${word[0].toUpperCase()}${word.slice(1)}` : word,
+    )
+    .join('-');
+
 const cdnIconPath = (icon: BlueprintIcon): string =>
   icon.type === 'virtual' ? `signal/${icon.name}` : icon.name;
+
+// The wiki's MediaWiki thumbnail path (/images/thumb/<name>.png/<px>-<name>.png)
+// only resolves for pixel sizes that have actually been pre-generated —
+// requesting an arbitrary size like 64px 404s for most images, since
+// nothing has requested that exact size before. The original upload at
+// /images/<name>.png has no such dependency and is always present when the
+// wiki has the image at all, confirmed directly against a real page's
+// rendered <img> URLs.
+export const getWikiImageUrl = (icon: BlueprintIcon): string =>
+  `https://wiki.factorio.com/images/${icon.type === 'virtual' ? toWikiSignalName(icon.name) : toWikiName(icon.name)}.png`;
 
 // Ordered fallback chain: the community CDN's base-game set, then its
 // Space Age set (some signals, like the non-Nauvis planets, only exist
 // there), then the wiki as a last resort per ADR-0001.
 export const getIconCandidateUrls = (icon: BlueprintIcon): string[] => {
   const path = cdnIconPath(icon);
-  const wikiName = toWikiName(icon.name);
 
   return [
     `${CDN_BASE}/base/icons/${path}.png`,
     `${CDN_BASE}/space-age/icons/${path}.png`,
-    `https://wiki.factorio.com/images/thumb/${wikiName}.png/64px-${wikiName}.png`,
+    getWikiImageUrl(icon),
   ];
 };
 

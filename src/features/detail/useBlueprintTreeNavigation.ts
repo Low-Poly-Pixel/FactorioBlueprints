@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import type { ResolvedBlueprintTreeNode } from '../../shared/blueprint/icons';
+import type { ResolvedBlueprintTreeNode } from '@/shared/blueprint/icons';
 
 // --- pure tree/path helpers --------------------------------------------
 
@@ -51,8 +51,13 @@ const useExpandedPaths = (): [
   ReadonlySet<string>,
   (path: string, open: boolean) => void,
 ] => {
+  // The root ("0") starts expanded — the tree's root is always the page's
+  // own blueprint/book (see getContentsTreeNodes), so without this, every
+  // detail page would load with its real contents hidden behind an extra
+  // click on a node that's already visually established by the hero card
+  // above it.
   const [expandedPaths, setExpandedPaths] = useState<ReadonlySet<string>>(
-    () => new Set(),
+    () => new Set(['0']),
   );
 
   const toggleExpanded = (path: string, open: boolean) => {

@@ -1,6 +1,6 @@
 import type { SyntheticEvent } from 'react';
 
-import type { ResolvedBlueprintIcon } from '../blueprint/icons';
+import type { ResolvedBlueprintIcon } from '@/shared/blueprint/icons';
 
 const gridPositionByIndex: Record<number, string> = {
   1: 'col-start-1 row-start-1',

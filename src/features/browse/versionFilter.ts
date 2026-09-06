@@ -1,6 +1,7 @@
+import type { VersionFilter } from '@/api/blueprintConditions.server';
+import type { AvailableGameVersion } from '@/api/searchBlueprints.functions';
 import type { FilterSelectOption } from './FilterSelectField';
 import { FACTORIO_VERSION_LINES } from './factorioVersionLines';
-import type { AvailableGameVersion, VersionFilter } from './searchBlueprints';
 
 export type VersionSearchParams = {
   versionMajor?: number;

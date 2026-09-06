@@ -1,8 +1,9 @@
 import { ChevronRight } from 'lucide-react';
 
-import type { EntityKind } from '../../shared/blueprint/exportStringDecoder';
-import type { ResolvedBlueprintIcon } from '../../shared/blueprint/icons';
-import { EntityIcons } from '../../shared/components/EntityIcons';
+import type { EntityKind } from '@/shared/blueprint/exportStringDecoder';
+import type { ResolvedBlueprintIcon } from '@/shared/blueprint/icons';
+import { EntityIcons } from '@/shared/components/EntityIcons';
+import { FactorioRichText } from '@/shared/components/FactorioRichText';
 import { OpenInBlueprintEditorButton } from './OpenInBlueprintEditorButton';
 
 type BlueprintTreeNodeRowProps = {
@@ -38,6 +39,8 @@ export const BlueprintTreeNodeRow = ({
       <OpenInBlueprintEditorButton exportString={exportString} />
     )}
     <EntityIcons entityKind={entityKind} icons={icons} size="tree" />
-    <span className="truncate text-foreground text-sm">{title}</span>
+    <span className="truncate text-foreground text-sm">
+      <FactorioRichText text={title} />
+    </span>
   </div>
 );

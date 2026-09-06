@@ -1,7 +1,11 @@
-import type { EntityKind, GameVersion } from '../blueprint/exportStringDecoder';
-import { formatTimeSinceUpload } from '../blueprint/formatTimeSinceUpload';
-import type { ResolvedBlueprintIcon } from '../blueprint/icons';
+import type {
+  EntityKind,
+  GameVersion,
+} from '@/shared/blueprint/exportStringDecoder';
+import { formatTimeSinceUpload } from '@/shared/blueprint/formatTimeSinceUpload';
+import type { ResolvedBlueprintIcon } from '@/shared/blueprint/icons';
 import { EntityIcons } from './EntityIcons';
+import { FactorioRichText } from './FactorioRichText';
 
 // Structural shape only — both BlueprintSummary (browse) and BlueprintDetail
 // (detail) satisfy this without needing to import from each other's feature.
@@ -44,8 +48,10 @@ export const BlueprintSummaryCard = ({
       icons={blueprint.icons}
       size="card"
     />
-    <div className="flex flex-col gap-1">
-      <h2 className="font-semibold text-foreground">{blueprint.title}</h2>
+    <div className="flex flex-col gap-1 ">
+      <h2 className="font-semibold text-foreground">
+        <FactorioRichText text={blueprint.title} />
+      </h2>
       <div className="flex gap-2">
         <p className={`text-sm ${entityKindTextColor[blueprint.entityKind]}`}>
           {entityKindLabels[blueprint.entityKind]}

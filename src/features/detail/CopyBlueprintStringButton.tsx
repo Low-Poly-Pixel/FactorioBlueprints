@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button } from '../../shared/components/shadcn/button';
+import { Button } from '@/shared/components/shadcn/button';
 import { CopyBlueprintStringIcon } from './CopyBlueprintStringIcon';
 
 type CopyBlueprintStringButtonProps = {

@@ -1,12 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
 
-import { BrowsePage } from '../features/browse/BrowsePage';
 import {
   availableGameVersionsQueryOptions,
   searchBlueprintsQueryOptions,
-} from '../features/browse/searchBlueprints';
-import { getVersionFilterFromSearch } from '../features/browse/versionFilter';
+} from '@/api/searchBlueprints.functions';
+import { BrowsePage } from '@/features/browse/BrowsePage';
+import { getPageSizeFromSearch } from '@/features/browse/pagination';
+import { getVersionFilterFromSearch } from '@/features/browse/versionFilter';
 
 // Search-param input is user-controlled (a hand-edited/shared URL, or a
 // stale bookmark from before a valid value changed), so it's validated at
@@ -31,6 +32,12 @@ const browseSearchSchema = z.object({
     ])
     .optional()
     .catch(undefined),
+  page: z.number().int().positive().optional().catch(undefined),
+  // Membership in {2, 4, 8} is checked at use-site via
+  // getPageSizeFromSearch, not here — same reasoning as versionMajor below:
+  // a well-typed-but-not-a-real-option value should fall back gracefully
+  // rather than throw. This just guards the shape.
+  pageSize: z.number().int().positive().optional().catch(undefined),
   q: z.string().optional().catch(undefined),
   versionMajor: z.number().int().optional().catch(undefined),
   versionMinor: z.number().int().optional().catch(undefined),
@@ -48,6 +55,8 @@ export const Route = createFileRoute('/')({
       queryClient.query({
         ...searchBlueprintsQueryOptions({
           entityKind: deps.search.entityKind,
+          page: deps.search.page ?? 1,
+          pageSize: getPageSizeFromSearch(deps.search.pageSize),
           query: deps.search.q ?? '',
           version: getVersionFilterFromSearch(deps.search),
         }),

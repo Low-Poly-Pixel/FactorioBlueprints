@@ -54,7 +54,6 @@ const extractIcons = (payload: RawPayload): BlueprintIcon[] =>
 
 export const decodeBlueprintString = (raw: string): DecodedBlueprint => {
   const { entityKind, payload, trimmed } = parseBlueprintPayload(raw);
-
   return {
     entityKind,
     title: payload.label ?? fallbackTitles[entityKind],

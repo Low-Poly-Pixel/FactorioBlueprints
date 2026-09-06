@@ -34,9 +34,11 @@ React via TanStack Start on Vite, deployed to Cloudflare Workers, D1 as the only
 ## File structure
 
 - `routes/` — TanStack Router route files only, kept thin: each one imports its actual component/logic from `features/` rather than containing it.
-- `features/<name>/` — anything used by exactly one feature, colocated (component, hook, test together).
+- `api/` — every file that reaches the database or crosses the server-fn RPC boundary, regardless of which feature(s) call it. Pulled out of `features/` so backend/SSR code is discoverable in one place rather than mixed in with UI. Follows TanStack Start's own suffix convention for larger apps (see the "Server Functions" guide): `*.functions.ts` exports the `createServerFn` wrapper itself and is safe to import from anywhere, including client components, because the client bundle only ever sees a generated fetch-stub; `*.server.ts` holds server-only helpers (SQL builders, row mappers) meant to be imported only from a `.functions.ts` handler, never from client-reachable code.
+- `features/<name>/` — anything used by exactly one feature, colocated (component, hook, test together). Pure client-side logic that happens to be *used by* a server function (e.g. `features/browse/pagination.ts`, shared between the pagination UI and the server-side clamping math) stays here rather than moving to `api/` — `api/` is for backend-only code, not everything a server function touches.
 - `shared/` — anything used by two or more features, promoted the moment a second feature needs it. shadcn/ui's generated primitives live in `shared/components/shadcn/` (see that folder's own README) — kept out of `shared/components/` proper and out of `ui/`'s generic naming so it reads unmistakably as CLI-generated, not hand-authored.
 - No tool-enforced import boundaries between features (a `dependency-cruiser` config exists in this repo's skill templates and was deliberately not wired up here) — this project is solo-developer and four features wide, which is too small for that machinery to earn its cost. Revisit if the team or codebase grows.
+- Imports: same-folder siblings use `./Name`; anything outside the current folder uses the `@/` alias from `src/` (`@/api/searchBlueprints.functions`, `@/shared/components/PageContainer`) — never a `../` parent-relative chain. `@/*` is already wired up in `tsconfig.json` and `vite.config.ts`'s `tsconfigPaths` resolver; a `../../` chain breaks the moment a file moves to a different nesting depth, while `@/...` doesn't. Not Biome-enforced (no stable rule for import-depth restrictions) — hold ourselves to it manually.
 
 ## State
 
@@ -45,7 +47,7 @@ React via TanStack Start on Vite, deployed to Cloudflare Workers, D1 as the only
 
 ## Data fetching
 
-- TanStack Start loaders + `createServerFn` for all SSR-critical or one-shot data: the detail page, the upload flow.
+- TanStack Start loaders + `createServerFn` (in `api/`, see File structure above) for all SSR-critical or one-shot data: the detail page, the upload flow.
 - TanStack Query, loader-seeded, only on the browse/search/filter page — see [ADR-0009](docs/adr/0009-loaders-vs-query-split.md) for why it's scoped there and nowhere else.
 
 ## UI components
@@ -53,5 +55,5 @@ React via TanStack Start on Vite, deployed to Cloudflare Workers, D1 as the only
 - shadcn/ui: Radix UI primitives + Tailwind, generated into the repo via its CLI (not an opaque installed dependency) — chosen for WCAG-correct behavior (focus management, keyboard nav, ARIA) out of the box. See [ADR-0005](docs/adr/0005-shadcn-dark-mode-only.md).
 - Dark mode only for V1 — no light-mode toggle.
 - Corners: slight rounding via one `--radius` CSS variable, applied everywhere through shadcn's derived `rounded-*` tokens — don't override per component. See [ADR-0010](docs/adr/0010-sharp-corners.md).
-- No borders anywhere except the header's bottom divider — panels/cards read as distinct surfaces via `bg-card` background contrast, not outlines. See [ADR-0013](docs/adr/0013-no-borders-except-header.md).
+- No borders anywhere except at a fixed-chrome/scrollable-content boundary (the header's bottom divider; the browse page's sub-header bottom divider and pagination footer top divider) — panels/cards read as distinct surfaces via `bg-card` background contrast, not outlines. See [ADR-0013](docs/adr/0013-no-borders-except-header.md).
 - See [docs/style-guide.md](docs/style-guide.md) for the current visual conventions as they get settled.

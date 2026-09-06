@@ -1,7 +1,7 @@
 import { createFileRoute, notFound } from '@tanstack/react-router';
 
-import { BlueprintDetailPage } from '../features/detail/BlueprintDetailPage';
-import { getBlueprintDetail } from '../features/detail/getBlueprintDetail';
+import { getBlueprintDetail } from '@/api/getBlueprintDetail.functions';
+import { BlueprintDetailPage } from '@/features/detail/BlueprintDetailPage';
 
 export const Route = createFileRoute('/blueprints/$id')({
   loader: async ({ params }) => {

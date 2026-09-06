@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 
+import type { AvailableGameVersion } from '@/api/searchBlueprints.functions';
 import { FilterSelectField } from './FilterSelectField';
-import type { AvailableGameVersion } from './searchBlueprints';
 import {
   decodeVersionLine,
   getAvailablePatches,
@@ -20,7 +20,10 @@ export const BrowseVersionFilter = ({
   const navigate = useNavigate({ from: '/' });
 
   const setSearch = (changes: Partial<typeof search>) =>
-    navigate({ search: (previous) => ({ ...previous, ...changes }) });
+    navigate({
+      search: (previous) => ({ ...previous, page: undefined, ...changes }),
+      viewTransition: false,
+    });
 
   const versionLineValue = getVersionLineValue(
     search.versionMajor,
@@ -42,7 +45,7 @@ export const BrowseVersionFilter = ({
         options={versionLineOptions}
         placeholder="Version"
         value={versionLineValue}
-        widthClassName="w-28"
+        widthClassName="w-24"
       />
       <FilterSelectField
         ariaLabel="Filter by patch version"
@@ -58,7 +61,7 @@ export const BrowseVersionFilter = ({
         )}
         placeholder="Patch"
         value={search.versionPatch?.toString()}
-        widthClassName="w-28"
+        widthClassName="w-24"
       />
     </>
   );

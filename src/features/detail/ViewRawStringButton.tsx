@@ -1,5 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
-import { Button } from '../../shared/components/shadcn/button';
+import { Button } from '@/shared/components/shadcn/button';
 import {
   Dialog,
   DialogClose,
@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../shared/components/shadcn/dialog';
+} from '@/shared/components/shadcn/dialog';
 import { outlineAccentButtonClassName } from './outlineAccentButtonClassName';
 
 type ViewRawStringButtonProps = {

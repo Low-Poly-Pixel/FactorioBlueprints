@@ -1,17 +1,18 @@
 import { useRouter } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 
-import type { ResolvedBlueprintTreeNode } from '../../shared/blueprint/icons';
-import { BlueprintSummaryCard } from '../../shared/components/BlueprintSummaryCard';
+import type { BlueprintDetail } from '@/api/getBlueprintDetail.functions';
+import type { ResolvedBlueprintTreeNode } from '@/shared/blueprint/icons';
+import { BlueprintSummaryCard } from '@/shared/components/BlueprintSummaryCard';
 import {
   blueprintCardShellClassName,
   getBlueprintCardViewTransitionName,
-} from '../../shared/components/blueprintCardShell';
-import { PageContainer } from '../../shared/components/PageContainer';
-import { Button } from '../../shared/components/shadcn/button';
+} from '@/shared/components/blueprintCardShell';
+import { FactorioRichText } from '@/shared/components/FactorioRichText';
+import { PageContainer } from '@/shared/components/PageContainer';
+import { Button } from '@/shared/components/shadcn/button';
 import { BlueprintTree } from './BlueprintTree';
 import { CopyBlueprintStringButton } from './CopyBlueprintStringButton';
-import type { BlueprintDetail } from './getBlueprintDetail';
 import { outlineAccentButtonClassName } from './outlineAccentButtonClassName';
 import { ViewRawStringButton } from './ViewRawStringButton';
 
@@ -22,23 +23,24 @@ type BlueprintDetailPageProps = {
 const panelClassName = 'mt-4 rounded-md bg-card p-4';
 const sectionHeadingClassName = 'font-semibold text-foreground';
 
-// A Blueprint Book's "contents" are its real entries. Every other entity
-// kind is still structurally one item, so it gets a single self-referencing
-// leaf node rather than an empty/hidden Contents section.
+// The tree's root is always the page's own blueprint/book, with its real
+// entries (if any) nested underneath — previously a book skipped straight
+// to its children as the top-level rows, which meant the book containing
+// them never appeared in its own Contents section at all, only in the
+// hero card above it. Every other entity kind still has no real children,
+// so it's just a single leaf under itself.
 const getContentsTreeNodes = (
   blueprint: BlueprintDetail,
-): ResolvedBlueprintTreeNode[] =>
-  blueprint.entityKind === 'blueprint_book'
-    ? blueprint.children
-    : [
-        {
-          children: [],
-          entityKind: blueprint.entityKind,
-          exportString: blueprint.exportString,
-          icons: blueprint.icons,
-          title: blueprint.title,
-        },
-      ];
+): ResolvedBlueprintTreeNode[] => [
+  {
+    children:
+      blueprint.entityKind === 'blueprint_book' ? blueprint.children : [],
+    entityKind: blueprint.entityKind,
+    exportString: blueprint.exportString,
+    icons: blueprint.icons,
+    title: blueprint.title,
+  },
+];
 
 export const BlueprintDetailPage = ({
   blueprint,
@@ -71,7 +73,11 @@ export const BlueprintDetailPage = ({
       <div className={panelClassName}>
         <h2 className={sectionHeadingClassName}>Description</h2>
         <p className="mt-1 text-muted-foreground text-sm">
-          {blueprint.description ?? 'No description provided.'}
+          {blueprint.description ? (
+            <FactorioRichText text={blueprint.description} />
+          ) : (
+            'No description provided.'
+          )}
         </p>
       </div>
       <div className={panelClassName}>

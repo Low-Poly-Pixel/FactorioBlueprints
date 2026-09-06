@@ -4,11 +4,11 @@ import { createServerFn } from '@tanstack/react-start';
 import type {
   EntityKind,
   GameVersion,
-} from '../../shared/blueprint/exportStringDecoder';
+} from '@/shared/blueprint/exportStringDecoder';
 import type {
   ResolvedBlueprintIcon,
   ResolvedBlueprintTreeNode,
-} from '../../shared/blueprint/icons';
+} from '@/shared/blueprint/icons';
 
 export type BlueprintDetail = {
   id: string;

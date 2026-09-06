@@ -1,8 +1,8 @@
-import type { EntityKind } from '../blueprint/exportStringDecoder';
+import type { EntityKind } from '@/shared/blueprint/exportStringDecoder';
 import {
   entityKindIconUrls,
   type ResolvedBlueprintIcon,
-} from '../blueprint/icons';
+} from '@/shared/blueprint/icons';
 import { SingleEntityIcon } from './SingleEntityIcon';
 
 // 'card' backs the browse/detail summary card slot; 'tree' is the smaller
@@ -78,7 +78,7 @@ type EntityIconsProps = {
 
 export const EntityIcons = ({ entityKind, icons, size }: EntityIconsProps) => (
   <div
-    className={`relative rounded-md ${slotSizeClassBySize[size]} bg-card ${slotPaddingByEntityKindAndSize[size][entityKind]}`}
+    className={`relative rounded-md bg-card ${slotSizeClassBySize[size]} ${slotPaddingByEntityKindAndSize[size][entityKind]}`}
   >
     <img
       alt=""

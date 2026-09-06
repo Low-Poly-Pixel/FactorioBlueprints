@@ -6,12 +6,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../shared/components/shadcn/select';
+} from '@/shared/components/shadcn/select';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '../../shared/components/shadcn/tooltip';
+} from '@/shared/components/shadcn/tooltip';
 import { interactiveFieldClassName } from './interactiveFieldClassName';
 
 export type FilterSelectOption = {

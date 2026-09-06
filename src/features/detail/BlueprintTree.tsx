@@ -1,4 +1,4 @@
-import type { ResolvedBlueprintTreeNode } from '../../shared/blueprint/icons';
+import type { ResolvedBlueprintTreeNode } from '@/shared/blueprint/icons';
 import { BlueprintTreeNode } from './BlueprintTreeNode';
 import { useBlueprintTreeNavigation } from './useBlueprintTreeNavigation';
 

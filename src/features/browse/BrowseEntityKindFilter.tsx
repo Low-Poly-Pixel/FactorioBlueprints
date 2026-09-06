@@ -1,9 +1,6 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import type { EntityKind } from '../../shared/blueprint/entityKind';
-import {
-  fallbackTitles,
-  isEntityKind,
-} from '../../shared/blueprint/entityKind';
+import type { EntityKind } from '@/shared/blueprint/entityKind';
+import { fallbackTitles, isEntityKind } from '@/shared/blueprint/entityKind';
 import { FilterSelectField } from './FilterSelectField';
 
 // Object.entries() always widens keys to string, even though fallbackTitles
@@ -26,7 +23,9 @@ export const BrowseEntityKindFilter = () => {
           search: (previous) => ({
             ...previous,
             entityKind: value && isEntityKind(value) ? value : undefined,
+            page: undefined,
           }),
+          viewTransition: false,
         })
       }
       options={entityKindOptions}
