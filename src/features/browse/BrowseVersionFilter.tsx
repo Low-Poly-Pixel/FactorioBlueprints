@@ -47,6 +47,7 @@ export const BrowseVersionFilter = ({
       <FilterSelectField
         ariaLabel="Filter by patch version"
         disabled={search.versionMajor === undefined}
+        disabledTooltip="Select a version first"
         onChange={(value) =>
           setSearch({ versionPatch: value ? Number(value) : undefined })
         }

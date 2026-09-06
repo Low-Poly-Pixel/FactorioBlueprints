@@ -10,6 +10,7 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import type { ReactNode } from 'react';
 
 import { Header } from '../shared/components/header';
+import { TooltipProvider } from '../shared/components/shadcn/tooltip';
 import appCss from '../styles.css?url';
 
 type RootDocumentProps = {
@@ -30,8 +31,10 @@ const RootDocument = ({ children }: RootDocumentProps) => {
       </head>
       <body>
         <QueryClientProvider client={queryClient}>
-          <Header />
-          {children}
+          <TooltipProvider>
+            <Header />
+            {children}
+          </TooltipProvider>
         </QueryClientProvider>
         <TanStackDevtools
           config={{ position: 'bottom-right' }}
