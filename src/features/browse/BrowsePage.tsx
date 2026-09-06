@@ -32,11 +32,17 @@ export const BrowsePage = () => {
         <BrowseEntityKindFilter />
         <BrowseVersionFilter availableVersions={availableVersions} />
       </div>
-      <ul className="mt-4 flex flex-col gap-3">
-        {blueprints.map((blueprint) => (
-          <BlueprintResultCard key={blueprint.id} blueprint={blueprint} />
-        ))}
-      </ul>
+      {blueprints.length === 0 ? (
+        <div className="mt-4 rounded-md bg-card p-8 text-center text-muted-foreground">
+          No Results Found
+        </div>
+      ) : (
+        <ul className="mt-4 flex flex-col gap-3">
+          {blueprints.map((blueprint) => (
+            <BlueprintResultCard key={blueprint.id} blueprint={blueprint} />
+          ))}
+        </ul>
+      )}
     </PageContainer>
   );
 };
