@@ -28,7 +28,7 @@ export const BrowseSearchInput = () => {
       />
       <Input
         aria-label="Search blueprints by title"
-        className="pl-9 focus-visible:border-primary focus-visible:ring-primary/50"
+        className="pl-9 focus-visible:border-primary focus-visible:ring-0"
         onChange={(event) => setInputValue(event.target.value)}
         placeholder="Search blueprints..."
         type="search"
