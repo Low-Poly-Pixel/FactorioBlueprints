@@ -5,7 +5,7 @@ import { GearIcon } from './icons/gear';
 import { Button } from './shadcn/button';
 
 export const Header = () => (
-  <header className="relative flex items-center justify-between overflow-hidden px-6 py-4 shadow-[0_1px_0_0_var(--border)]">
+  <header className="relative flex items-center justify-between overflow-hidden border-border border-b px-6 py-4">
     <GearIcon className="-top-6 right-32 pointer-events-none absolute -z-10 size-48 text-foreground/10" />
     <Link
       to="/"
