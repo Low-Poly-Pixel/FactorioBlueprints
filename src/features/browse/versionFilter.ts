@@ -58,13 +58,20 @@ export const getVersionLineValue = (
     ? encodeVersionLine(major, minor ?? 0)
     : undefined;
 
+// Newest first — the most likely versions to filter by. Major is the
+// primary sort key; ties (e.g. 0.17 vs 0.18) fall through to minor.
+const compareVersionLinesNewestFirst = (
+  [aMajor, aMinor]: readonly [number, number],
+  [bMajor, bMinor]: readonly [number, number],
+): number => {
+  if (aMajor !== bMajor) return bMajor - aMajor;
+  return bMinor - aMinor;
+};
+
 export const versionLineOptions: FilterSelectOption[] = [
   ...FACTORIO_VERSION_LINES,
 ]
-  // Newest first — the most likely versions to filter by.
-  .sort(([aMajor, aMinor], [bMajor, bMinor]) =>
-    aMajor === bMajor ? bMinor - aMinor : bMajor - aMajor,
-  )
+  .sort(compareVersionLinesNewestFirst)
   .map(([major, minor]) => {
     const label = encodeVersionLine(major, minor);
     return { label, value: label };
@@ -78,12 +85,12 @@ export const getAvailablePatches = (
   major: number | undefined,
   minor: number | undefined,
 ): FilterSelectOption[] =>
-  major === undefined || minor === undefined
-    ? []
-    : getUniqueSorted(
+  major !== undefined && minor !== undefined
+    ? getUniqueSorted(
         versions
           .filter(
             (version) => version.major === major && version.minor === minor,
           )
           .map((version) => version.patch),
-      ).map((patch) => ({ label: String(patch), value: String(patch) }));
+      ).map((patch) => ({ label: String(patch), value: String(patch) }))
+    : [];

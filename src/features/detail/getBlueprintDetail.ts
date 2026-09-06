@@ -49,9 +49,8 @@ export const getBlueprintDetail = createServerFn({ method: 'GET' })
       .bind(id)
       .first<BlueprintDetailRow>();
 
-    return !row
-      ? null
-      : {
+    return row
+      ? {
           id: row.id,
           title: row.title,
           description: row.description,
@@ -67,5 +66,6 @@ export const getBlueprintDetail = createServerFn({ method: 'GET' })
           icons: JSON.parse(row.icons),
           children: JSON.parse(row.tree),
           exportString: row.export_string,
-        };
+        }
+      : null;
   });

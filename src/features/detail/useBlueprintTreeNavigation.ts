@@ -29,7 +29,7 @@ const getNodeAtPath = (
 
 const getParentPath = (path: string): string | null => {
   const lastDash = path.lastIndexOf('-');
-  return lastDash === -1 ? null : path.slice(0, lastDash);
+  return lastDash !== -1 ? path.slice(0, lastDash) : null;
 };
 
 const getSiblingFocusPath = (
