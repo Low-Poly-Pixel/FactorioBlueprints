@@ -44,7 +44,8 @@ export const FilterSelectField = ({
     >
       <SelectTrigger
         aria-label={ariaLabel}
-        className={`${widthClassName} ${value ? 'pr-7' : ''} ${interactiveFieldClassName}`}
+        className={`${widthClassName} ${interactiveFieldClassName}`}
+        hideChevron={Boolean(value)}
       >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
@@ -67,7 +68,7 @@ export const FilterSelectField = ({
     {value && (
       <button
         aria-label={`Clear ${placeholder.toLowerCase()} filter`}
-        className="-translate-y-1/2 absolute top-1/2 right-7 text-muted-foreground transition-colors hover:text-foreground"
+        className="-translate-y-1/2 absolute top-1/2 right-2 text-muted-foreground transition-colors hover:text-foreground"
         onClick={(event) => {
           event.stopPropagation();
           onChange(undefined);
