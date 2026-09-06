@@ -22,18 +22,11 @@ export type FilterSelectOption = {
 type FilterSelectFieldProps = {
   ariaLabel: string;
   disabled?: boolean;
-  // Shown on hover while disabled, explaining why (e.g. patch needs a
-  // version picked first) — a disabled native <button> can swallow hover in
-  // some browsers, so the tooltip trigger wraps the whole field rather than
-  // just the (disabled) select trigger.
   disabledTooltip?: string;
   onChange: (value: string | undefined) => void;
   options: FilterSelectOption[];
   placeholder: string;
-  value: string | undefined;
-  // Content width matches the trigger exactly (see SelectContent below), so
-  // this needs to fit each field's own longest label — "Deconstruction
-  // Planner" needs far more room than a bare "Patch" placeholder does.
+  value?: string;
   widthClassName: string;
 };
 
@@ -68,7 +61,7 @@ export const FilterSelectField = ({
             under the trigger, matching its width via the CSS variable
             Radix exposes. */}
         <SelectContent
-          className="w-[var(--radix-select-trigger-width)] min-w-0"
+          className="w-(--radix-select-trigger-width) min-w-0"
           position="popper"
         >
           {options.map((option) => (
