@@ -42,7 +42,7 @@ export const BrowseVersionFilter = ({
         options={versionLineOptions}
         placeholder="Version"
         value={versionLineValue}
-        widthClassName="w-36"
+        widthClassName="w-28"
       />
       <FilterSelectField
         ariaLabel="Filter by patch version"
@@ -58,7 +58,7 @@ export const BrowseVersionFilter = ({
         ).map((patch) => ({ label: String(patch), value: String(patch) }))}
         placeholder="Patch"
         value={search.versionPatch?.toString()}
-        widthClassName="w-32"
+        widthClassName="w-28"
       />
     </>
   );

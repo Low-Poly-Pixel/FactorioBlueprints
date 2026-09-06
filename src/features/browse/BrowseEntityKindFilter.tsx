@@ -25,7 +25,7 @@ export const BrowseEntityKindFilter = () => {
       options={entityKindOptions}
       placeholder="Type"
       value={entityKind}
-      widthClassName="w-56"
+      widthClassName="w-48"
     />
   );
 };
