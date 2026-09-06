@@ -22,17 +22,17 @@ export const BrowseSearchInput = () => {
 
   return (
     <div className="relative">
-      <Search
-        aria-hidden="true"
-        className="-translate-y-1/2 absolute top-1/2 left-3 size-4 text-muted-foreground"
-      />
       <Input
         aria-label="Search blueprints by title"
-        className="pl-9 transition-colors duration-200 focus-visible:border-primary focus-visible:ring-0"
+        className="peer pl-9 transition-colors duration-200 hover:border-primary/50 focus-visible:border-primary focus-visible:ring-0"
         onChange={(event) => setInputValue(event.target.value)}
         placeholder="Search blueprints..."
         type="search"
         value={inputValue}
+      />
+      <Search
+        aria-hidden="true"
+        className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-3 size-4 text-muted-foreground transition-colors duration-200 peer-hover:text-primary/50 peer-focus-visible:text-primary"
       />
     </div>
   );
