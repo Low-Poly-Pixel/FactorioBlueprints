@@ -39,10 +39,22 @@ type BlueprintRow = {
 const selectBlueprintsSql =
   'SELECT id, title, description, author, created_at, entity_kind, game_version_major, game_version_minor, game_version_patch, game_version_dev, icons FROM blueprints';
 
-export const searchBlueprints = createServerFn({ method: 'GET' }).handler(
-  async (): Promise<BlueprintSummary[]> => {
-    const { results } =
-      await env.DB.prepare(selectBlueprintsSql).all<BlueprintRow>();
+const selectBlueprintsByTitleSql = `${selectBlueprintsSql} WHERE title LIKE ?`;
+
+type SearchBlueprintsInput = {
+  query: string;
+};
+
+export const searchBlueprints = createServerFn({ method: 'GET' })
+  .validator((input: SearchBlueprintsInput) => input)
+  .handler(async ({ data: { query } }): Promise<BlueprintSummary[]> => {
+    const trimmedQuery = query.trim();
+
+    const { results } = trimmedQuery
+      ? await env.DB.prepare(selectBlueprintsByTitleSql)
+          .bind(`%${trimmedQuery}%`)
+          .all<BlueprintRow>()
+      : await env.DB.prepare(selectBlueprintsSql).all<BlueprintRow>();
 
     return results.map((row) => ({
       id: row.id,
@@ -59,11 +71,10 @@ export const searchBlueprints = createServerFn({ method: 'GET' }).handler(
       },
       icons: JSON.parse(row.icons),
     }));
-  },
-);
+  });
 
-export const searchBlueprintsQueryOptions = () =>
+export const searchBlueprintsQueryOptions = (query: string) =>
   queryOptions({
-    queryKey: ['blueprints', 'search'],
-    queryFn: () => searchBlueprints(),
+    queryKey: ['blueprints', 'search', query],
+    queryFn: () => searchBlueprints({ data: { query } }),
   });

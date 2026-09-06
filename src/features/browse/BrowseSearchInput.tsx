@@ -1,0 +1,39 @@
+import { useNavigate, useSearch } from '@tanstack/react-router';
+import { Search } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+import { Input } from '../../shared/components/shadcn/input';
+import { useDebouncedValue } from './useDebouncedValue';
+
+const searchDebounceMs = 300;
+
+export const BrowseSearchInput = () => {
+  const { q } = useSearch({ from: '/' });
+  const navigate = useNavigate({ from: '/' });
+  const [inputValue, setInputValue] = useState(q ?? '');
+  const debouncedValue = useDebouncedValue(inputValue, searchDebounceMs);
+
+  useEffect(() => {
+    navigate({
+      replace: true,
+      search: (previous) => ({ ...previous, q: debouncedValue || undefined }),
+    });
+  }, [debouncedValue, navigate]);
+
+  return (
+    <div className="relative">
+      <Search
+        aria-hidden="true"
+        className="-translate-y-1/2 absolute top-1/2 left-3 size-4 text-muted-foreground"
+      />
+      <Input
+        aria-label="Search blueprints by title"
+        className="pl-9 focus-visible:border-primary focus-visible:ring-primary/50"
+        onChange={(event) => setInputValue(event.target.value)}
+        placeholder="Search blueprints..."
+        type="search"
+        value={inputValue}
+      />
+    </div>
+  );
+};

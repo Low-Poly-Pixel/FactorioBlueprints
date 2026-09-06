@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { useRouter } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 
 import type { ResolvedBlueprintTreeNode } from '../../shared/blueprint/icons';
@@ -42,42 +42,44 @@ const getContentsTreeNodes = (
 
 export const BlueprintDetailPage = ({
   blueprint,
-}: BlueprintDetailPageProps) => (
-  <PageContainer>
-    <Button
-      asChild
-      className={`mb-4 ${outlineAccentButtonClassName}`}
-      size="sm"
-      variant="outline"
-    >
-      <Link to="/" viewTransition>
+}: BlueprintDetailPageProps) => {
+  const router = useRouter();
+
+  return (
+    <PageContainer>
+      <Button
+        className={`mb-4 ${outlineAccentButtonClassName}`}
+        onClick={() => router.history.back()}
+        size="sm"
+        variant="outline"
+      >
         <ArrowLeft aria-hidden="true" className="size-4" />
         Back to search
-      </Link>
-    </Button>
-    <div
-      className={blueprintCardShellClassName}
-      style={{
-        viewTransitionName: getBlueprintCardViewTransitionName(blueprint.id),
-      }}
-    >
-      <BlueprintSummaryCard blueprint={blueprint} />
-    </div>
-    <div className={`${panelClassName} flex gap-2`}>
-      <CopyBlueprintStringButton exportString={blueprint.exportString} />
-      <ViewRawStringButton exportString={blueprint.exportString} />
-    </div>
-    <div className={panelClassName}>
-      <h2 className={sectionHeadingClassName}>Description</h2>
-      <p className="mt-1 text-muted-foreground text-sm">
-        {blueprint.description ?? 'No description provided.'}
-      </p>
-    </div>
-    <div className={panelClassName}>
-      <h2 className={sectionHeadingClassName}>Contents</h2>
-      <div className="mt-2">
-        <BlueprintTree nodes={getContentsTreeNodes(blueprint)} />
+      </Button>
+      <div
+        className={blueprintCardShellClassName}
+        style={{
+          viewTransitionName: getBlueprintCardViewTransitionName(blueprint.id),
+        }}
+      >
+        <BlueprintSummaryCard blueprint={blueprint} />
       </div>
-    </div>
-  </PageContainer>
-);
+      <div className={`${panelClassName} flex gap-2`}>
+        <CopyBlueprintStringButton exportString={blueprint.exportString} />
+        <ViewRawStringButton exportString={blueprint.exportString} />
+      </div>
+      <div className={panelClassName}>
+        <h2 className={sectionHeadingClassName}>Description</h2>
+        <p className="mt-1 text-muted-foreground text-sm">
+          {blueprint.description ?? 'No description provided.'}
+        </p>
+      </div>
+      <div className={panelClassName}>
+        <h2 className={sectionHeadingClassName}>Contents</h2>
+        <div className="mt-2">
+          <BlueprintTree nodes={getContentsTreeNodes(blueprint)} />
+        </div>
+      </div>
+    </PageContainer>
+  );
+};
