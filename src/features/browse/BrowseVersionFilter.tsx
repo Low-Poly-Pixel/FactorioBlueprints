@@ -23,9 +23,9 @@ export const BrowseVersionFilter = ({
     navigate({ search: (previous) => ({ ...previous, ...changes }) });
 
   const versionLineValue =
-    search.versionMajor === undefined
-      ? undefined
-      : encodeVersionLine(search.versionMajor, search.versionMinor ?? 0);
+    search.versionMajor !== undefined
+      ? encodeVersionLine(search.versionMajor, search.versionMinor ?? 0)
+      : undefined;
 
   return (
     <>
@@ -55,7 +55,7 @@ export const BrowseVersionFilter = ({
           availableVersions,
           search.versionMajor,
           search.versionMinor,
-        ).map((patch) => ({ label: String(patch), value: String(patch) }))}
+        )}
         placeholder="Patch"
         value={search.versionPatch?.toString()}
         widthClassName="w-28"

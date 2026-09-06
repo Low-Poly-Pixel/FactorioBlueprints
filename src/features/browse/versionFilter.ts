@@ -58,7 +58,7 @@ export const getAvailablePatches = (
   versions: AvailableGameVersion[],
   major: number | undefined,
   minor: number | undefined,
-): number[] =>
+): FilterSelectOption[] =>
   major === undefined || minor === undefined
     ? []
     : getUniqueSorted(
@@ -67,4 +67,4 @@ export const getAvailablePatches = (
             (version) => version.major === major && version.minor === minor,
           )
           .map((version) => version.patch),
-      );
+      ).map((patch) => ({ label: String(patch), value: String(patch) }));
