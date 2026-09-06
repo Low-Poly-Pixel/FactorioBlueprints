@@ -39,6 +39,25 @@ export const decodeVersionLine = (
   return { major, minor };
 };
 
+const isRecordedVersionLine = (major: number, minor: number): boolean =>
+  FACTORIO_VERSION_LINES.some(([m, n]) => m === major && n === minor);
+
+// Only produces a value when major/minor form an actual recorded Factorio
+// version line. An out-of-range value (e.g. ?versionMajor=3 — a well-typed
+// integer, just not a real version) has no matching dropdown option, and
+// Radix's SelectValue has nothing to render for an unmatched value, so the
+// trigger goes blank instead of falling back to its placeholder. Treating
+// only recognized combos as "selected" keeps the dropdown's visible state
+// (placeholder vs. value, clear button shown vs. hidden) consistent with
+// what's actually a real, selectable option.
+export const getVersionLineValue = (
+  major: number | undefined,
+  minor: number | undefined,
+): string | undefined =>
+  major !== undefined && isRecordedVersionLine(major, minor ?? 0)
+    ? encodeVersionLine(major, minor ?? 0)
+    : undefined;
+
 export const versionLineOptions: FilterSelectOption[] = [
   ...FACTORIO_VERSION_LINES,
 ]

@@ -4,8 +4,8 @@ import { FilterSelectField } from './FilterSelectField';
 import type { AvailableGameVersion } from './searchBlueprints';
 import {
   decodeVersionLine,
-  encodeVersionLine,
   getAvailablePatches,
+  getVersionLineValue,
   versionLineOptions,
 } from './versionFilter';
 
@@ -22,10 +22,10 @@ export const BrowseVersionFilter = ({
   const setSearch = (changes: Partial<typeof search>) =>
     navigate({ search: (previous) => ({ ...previous, ...changes }) });
 
-  const versionLineValue =
-    search.versionMajor !== undefined
-      ? encodeVersionLine(search.versionMajor, search.versionMinor ?? 0)
-      : undefined;
+  const versionLineValue = getVersionLineValue(
+    search.versionMajor,
+    search.versionMinor,
+  );
 
   return (
     <>

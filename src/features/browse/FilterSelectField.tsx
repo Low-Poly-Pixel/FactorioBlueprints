@@ -54,21 +54,21 @@ export const FilterSelectField = ({
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
-        {/* Radix defaults to "item-aligned" positioning, which aligns each
-            item's text to the trigger's displayed value instead of padding
-            it normally — reads as centered-on-trigger with lopsided item
-            padding. "popper" anchors a normally-laid-out menu directly
-            under the trigger, matching its width via the CSS variable
-            Radix exposes. */}
         <SelectContent
           className="w-(--radix-select-trigger-width) min-w-0"
           position="popper"
         >
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
+          {options.length > 0 ? (
+            options.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))
+          ) : (
+            <div className="px-2 py-1.5 text-muted-foreground text-sm">
+              No {placeholder.toLowerCase()} options
+            </div>
+          )}
         </SelectContent>
       </Select>
       {value && (
@@ -87,14 +87,12 @@ export const FilterSelectField = ({
     </div>
   );
 
-  if (!(disabled && disabledTooltip)) {
-    return field;
-  }
-
-  return (
+  return disabled && disabledTooltip ? (
     <Tooltip>
       <TooltipTrigger asChild>{field}</TooltipTrigger>
       <TooltipContent>{disabledTooltip}</TooltipContent>
     </Tooltip>
+  ) : (
+    field
   );
 };
