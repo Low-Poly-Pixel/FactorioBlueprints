@@ -22,7 +22,7 @@ export const BrowseSearchInput = () => {
   }, [debouncedValue, navigate]);
 
   return (
-    <div className="relative">
+    <div className="relative flex-1">
       <Input
         aria-label="Search blueprints by title"
         className={`peer pl-9 ${interactiveFieldClassName}`}
