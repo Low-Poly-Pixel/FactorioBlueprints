@@ -10,3 +10,6 @@ export const fallbackTitles: Record<EntityKind, string> = {
   upgrade_planner: 'Upgrade Planner',
   deconstruction_planner: 'Deconstruction Planner',
 };
+
+export const isEntityKind = (value: string): value is EntityKind =>
+  value in fallbackTitles;

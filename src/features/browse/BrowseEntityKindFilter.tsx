@@ -1,8 +1,15 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import type { EntityKind } from '../../shared/blueprint/entityKind';
-import { fallbackTitles } from '../../shared/blueprint/entityKind';
+import {
+  fallbackTitles,
+  isEntityKind,
+} from '../../shared/blueprint/entityKind';
 import { FilterSelectField } from './FilterSelectField';
 
+// Object.entries() always widens keys to string, even though fallbackTitles
+// is a Record<EntityKind, string> — a known TS stdlib typing gap, not
+// unvalidated data (the object literal itself is ours and exhaustive), so
+// this narrows back safely rather than trusting arbitrary input.
 const entityKindOptions = (
   Object.entries(fallbackTitles) as [EntityKind, string][]
 ).map(([value, label]) => ({ label, value }));
@@ -18,7 +25,7 @@ export const BrowseEntityKindFilter = () => {
         navigate({
           search: (previous) => ({
             ...previous,
-            entityKind: value as EntityKind | undefined,
+            entityKind: value && isEntityKind(value) ? value : undefined,
           }),
         })
       }
