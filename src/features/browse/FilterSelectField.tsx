@@ -1,3 +1,5 @@
+import { X } from 'lucide-react';
+
 import {
   Select,
   SelectContent,
@@ -7,18 +9,12 @@ import {
 } from '../../shared/components/shadcn/select';
 import { interactiveFieldClassName } from './interactiveFieldClassName';
 
-// Sentinel for "no selection" — Radix's Select.Item forbids an empty-string
-// value, so this stands in for undefined and gets translated back at the
-// call site.
-const anyValue = 'any';
-
 export type FilterSelectOption = {
   label: string;
   value: string;
 };
 
 type FilterSelectFieldProps = {
-  anyLabel: string;
   ariaLabel: string;
   disabled?: boolean;
   onChange: (value: string | undefined) => void;
@@ -27,12 +23,11 @@ type FilterSelectFieldProps = {
   value: string | undefined;
   // Content width matches the trigger exactly (see SelectContent below), so
   // this needs to fit each field's own longest label — "Deconstruction
-  // Planner" needs far more room than "Any patch" does.
+  // Planner" needs far more room than a bare "Patch" placeholder does.
   widthClassName: string;
 };
 
 export const FilterSelectField = ({
-  anyLabel,
   ariaLabel,
   disabled,
   onChange,
@@ -41,32 +36,46 @@ export const FilterSelectField = ({
   value,
   widthClassName,
 }: FilterSelectFieldProps) => (
-  <Select
-    disabled={disabled}
-    onValueChange={(next) => onChange(next === anyValue ? undefined : next)}
-    value={value ?? anyValue}
-  >
-    <SelectTrigger
-      aria-label={ariaLabel}
-      className={`${widthClassName} ${interactiveFieldClassName}`}
+  <div className="relative">
+    <Select
+      disabled={disabled}
+      onValueChange={(next) => onChange(next || undefined)}
+      value={value ?? ''}
     >
-      <SelectValue placeholder={placeholder} />
-    </SelectTrigger>
-    {/* Radix defaults to "item-aligned" positioning, which aligns each
-        item's text to the trigger's displayed value instead of padding it
-        normally — reads as centered-on-trigger with lopsided item padding.
-        "popper" anchors a normally-laid-out menu directly under the
-        trigger, matching its width via the CSS variable Radix exposes. */}
-    <SelectContent
-      className="w-[var(--radix-select-trigger-width)] min-w-0"
-      position="popper"
-    >
-      <SelectItem value={anyValue}>{anyLabel}</SelectItem>
-      {options.map((option) => (
-        <SelectItem key={option.value} value={option.value}>
-          {option.label}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
+      <SelectTrigger
+        aria-label={ariaLabel}
+        className={`${widthClassName} ${value ? 'pr-7' : ''} ${interactiveFieldClassName}`}
+      >
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      {/* Radix defaults to "item-aligned" positioning, which aligns each
+          item's text to the trigger's displayed value instead of padding it
+          normally — reads as centered-on-trigger with lopsided item padding.
+          "popper" anchors a normally-laid-out menu directly under the
+          trigger, matching its width via the CSS variable Radix exposes. */}
+      <SelectContent
+        className="w-[var(--radix-select-trigger-width)] min-w-0"
+        position="popper"
+      >
+        {options.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+    {value && (
+      <button
+        aria-label={`Clear ${placeholder.toLowerCase()} filter`}
+        className="-translate-y-1/2 absolute top-1/2 right-7 text-muted-foreground transition-colors hover:text-foreground"
+        onClick={(event) => {
+          event.stopPropagation();
+          onChange(undefined);
+        }}
+        type="button"
+      >
+        <X aria-hidden="true" className="size-3.5" />
+      </button>
+    )}
+  </div>
 );

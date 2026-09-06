@@ -30,7 +30,6 @@ export const BrowseVersionFilter = ({
   return (
     <>
       <FilterSelectField
-        anyLabel="Any version"
         ariaLabel="Filter by version"
         onChange={(value) => {
           const decoded = value ? decodeVersionLine(value) : undefined;
@@ -46,7 +45,6 @@ export const BrowseVersionFilter = ({
         widthClassName="w-36"
       />
       <FilterSelectField
-        anyLabel="Any patch"
         ariaLabel="Filter by patch version"
         disabled={search.versionMajor === undefined}
         onChange={(value) =>

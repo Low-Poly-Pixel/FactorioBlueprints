@@ -13,7 +13,6 @@ export const BrowseEntityKindFilter = () => {
 
   return (
     <FilterSelectField
-      anyLabel="Any type"
       ariaLabel="Filter by blueprint type"
       onChange={(value) =>
         navigate({
