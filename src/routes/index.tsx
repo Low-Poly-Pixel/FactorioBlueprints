@@ -2,7 +2,11 @@ import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
 
 import { BrowsePage } from '../features/browse/BrowsePage';
-import { searchBlueprintsQueryOptions } from '../features/browse/searchBlueprints';
+import {
+  availableGameVersionsQueryOptions,
+  searchBlueprintsQueryOptions,
+} from '../features/browse/searchBlueprints';
+import { getVersionFilterFromSearch } from '../features/browse/versionFilter';
 
 // Search-param input is user-controlled (a hand-edited/shared URL), so it's
 // validated at this boundary like any other external input — see
@@ -10,18 +14,31 @@ import { searchBlueprintsQueryOptions } from '../features/browse/searchBlueprint
 // pattern applied to blueprint uploads.
 const browseSearchSchema = z.object({
   q: z.string().optional(),
+  versionExact: z.boolean().optional(),
+  versionMajor: z.number().int().optional(),
+  versionMinor: z.number().int().optional(),
+  versionPatch: z.number().int().optional(),
 });
 
-type BrowseSearch = z.infer<typeof browseSearchSchema>;
+export type BrowseSearch = z.infer<typeof browseSearchSchema>;
 
 export const Route = createFileRoute('/')({
   validateSearch: (search: Record<string, unknown>): BrowseSearch =>
     browseSearchSchema.parse(search),
-  loaderDeps: ({ search }) => ({ q: search.q }),
+  loaderDeps: ({ search }) => ({ search }),
   loader: ({ context: { queryClient }, deps }) =>
-    queryClient.query({
-      ...searchBlueprintsQueryOptions(deps.q ?? ''),
-      staleTime: 'static',
-    }),
+    Promise.all([
+      queryClient.query({
+        ...searchBlueprintsQueryOptions({
+          query: deps.search.q ?? '',
+          version: getVersionFilterFromSearch(deps.search),
+        }),
+        staleTime: 'static',
+      }),
+      queryClient.query({
+        ...availableGameVersionsQueryOptions(),
+        staleTime: 'static',
+      }),
+    ]),
   component: BrowsePage,
 });

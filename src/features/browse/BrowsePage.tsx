@@ -4,17 +4,31 @@ import { useSearch } from '@tanstack/react-router';
 import { PageContainer } from '../../shared/components/PageContainer';
 import { BlueprintResultCard } from './BlueprintResultCard';
 import { BrowseSearchInput } from './BrowseSearchInput';
-import { searchBlueprintsQueryOptions } from './searchBlueprints';
+import { BrowseVersionFilter } from './BrowseVersionFilter';
+import {
+  availableGameVersionsQueryOptions,
+  searchBlueprintsQueryOptions,
+} from './searchBlueprints';
+import { getVersionFilterFromSearch } from './versionFilter';
 
 export const BrowsePage = () => {
-  const { q } = useSearch({ from: '/' });
+  const search = useSearch({ from: '/' });
   const { data: blueprints } = useSuspenseQuery(
-    searchBlueprintsQueryOptions(q ?? ''),
+    searchBlueprintsQueryOptions({
+      query: search.q ?? '',
+      version: getVersionFilterFromSearch(search),
+    }),
+  );
+  const { data: availableVersions } = useSuspenseQuery(
+    availableGameVersionsQueryOptions(),
   );
 
   return (
     <PageContainer>
-      <BrowseSearchInput />
+      <div className="flex gap-3">
+        <BrowseSearchInput />
+        <BrowseVersionFilter availableVersions={availableVersions} />
+      </div>
       <ul className="mt-4 flex flex-col gap-3">
         {blueprints.map((blueprint) => (
           <BlueprintResultCard key={blueprint.id} blueprint={blueprint} />
