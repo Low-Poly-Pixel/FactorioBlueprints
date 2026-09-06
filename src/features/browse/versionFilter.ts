@@ -3,7 +3,6 @@ import { FACTORIO_VERSION_LINES } from './factorioVersionLines';
 import type { AvailableGameVersion, VersionFilter } from './searchBlueprints';
 
 export type VersionSearchParams = {
-  versionExact?: boolean;
   versionMajor?: number;
   versionMinor?: number;
   versionPatch?: number;
@@ -21,7 +20,6 @@ export const getVersionFilterFromSearch = (
   }
 
   return {
-    exact: search.versionExact ?? false,
     major: search.versionMajor,
     minor: search.versionMinor,
     patch: search.versionMinor !== undefined ? search.versionPatch : undefined,
@@ -44,7 +42,7 @@ export const decodeVersionLine = (
 export const versionLineOptions: FilterSelectOption[] = [
   ...FACTORIO_VERSION_LINES,
 ]
-  // Newest first, matching the "filter to this version or later" default.
+  // Newest first — the most likely versions to filter by.
   .sort(([aMajor, aMinor], [bMajor, bMinor]) =>
     aMajor === bMajor ? bMinor - aMinor : bMajor - aMajor,
   )

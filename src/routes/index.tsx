@@ -22,7 +22,6 @@ const browseSearchSchema = z.object({
     ])
     .optional(),
   q: z.string().optional(),
-  versionExact: z.boolean().optional(),
   versionMajor: z.number().int().optional(),
   versionMinor: z.number().int().optional(),
   versionPatch: z.number().int().optional(),

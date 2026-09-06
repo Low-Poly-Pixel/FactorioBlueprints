@@ -45,7 +45,6 @@ export type VersionFilter = {
   major: number;
   minor?: number;
   patch?: number;
-  exact: boolean;
 };
 
 type SearchBlueprintsInput = {
@@ -55,11 +54,8 @@ type SearchBlueprintsInput = {
 };
 
 // Builds the version WHERE fragment for whatever prefix of major/minor/patch
-// is selected. `exact` matches those fields precisely (trailing fields left
-// unselected are wildcards); the default is "this version or later", via
-// SQLite's row-value comparison — (major, minor) >= (?, ?) is exactly the
-// lexicographic tuple ordering this needs, confirmed against local D1 rather
-// than assumed.
+// is selected — an exact match on those fields; trailing fields left
+// unselected are wildcards (e.g. major+minor only matches any patch).
 const buildVersionCondition = (
   version: VersionFilter,
 ): { sql: string; params: number[] } => {
@@ -77,16 +73,9 @@ const buildVersionCondition = (
   }
   const selectedColumns = columns.slice(0, values.length);
 
-  if (version.exact) {
-    return {
-      params: values,
-      sql: selectedColumns.map((column) => `${column} = ?`).join(' AND '),
-    };
-  }
-
   return {
     params: values,
-    sql: `(${selectedColumns.join(', ')}) >= (${selectedColumns.map(() => '?').join(', ')})`,
+    sql: selectedColumns.map((column) => `${column} = ?`).join(' AND '),
   };
 };
 
@@ -148,7 +137,6 @@ export const searchBlueprintsQueryOptions = (input: SearchBlueprintsInput) =>
       input.version?.major,
       input.version?.minor,
       input.version?.patch,
-      input.version?.exact,
       input.entityKind,
     ],
     queryFn: () => searchBlueprints({ data: input }),

@@ -1,7 +1,5 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
 
-import { Checkbox } from '../../shared/components/shadcn/checkbox';
-import { Label } from '../../shared/components/shadcn/label';
 import { FilterSelectField } from './FilterSelectField';
 import type { AvailableGameVersion } from './searchBlueprints';
 import {
@@ -63,22 +61,6 @@ export const BrowseVersionFilter = ({
         value={search.versionPatch?.toString()}
         widthClassName="w-32"
       />
-      <div className="flex items-center gap-2">
-        <Checkbox
-          checked={search.versionExact ?? false}
-          disabled={search.versionMajor === undefined}
-          id="version-exact"
-          onCheckedChange={(checked) =>
-            setSearch({ versionExact: checked === true ? true : undefined })
-          }
-        />
-        <Label
-          className="text-muted-foreground text-sm"
-          htmlFor="version-exact"
-        >
-          Exact
-        </Label>
-      </div>
     </>
   );
 };
