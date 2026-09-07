@@ -41,6 +41,7 @@ const browseSearchSchema = z.object({
   q: z.string().optional().catch(undefined),
   versionMajor: z.number().int().optional().catch(undefined),
   versionMinor: z.number().int().optional().catch(undefined),
+  versionMissing: z.boolean().optional().catch(undefined),
   versionPatch: z.number().int().optional().catch(undefined),
 });
 

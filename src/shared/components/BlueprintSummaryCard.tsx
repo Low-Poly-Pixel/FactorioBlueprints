@@ -39,6 +39,12 @@ const entityKindTextColor: Record<EntityKind, string> = {
 const metaTextClassName = 'text-muted-foreground text-sm';
 const metaHighlightClassName = 'text-primary';
 
+// 0.0.0 has never been a real Factorio version (even the earliest recorded
+// line is 0.1 — see factorioVersionLines.ts), so this means the export
+// string's own version field was never set, not that it really is 0.0.0.
+const isMissingVersion = (version: GameVersion): boolean =>
+  version.major === 0 && version.minor === 0 && version.patch === 0;
+
 export const BlueprintSummaryCard = ({
   blueprint,
 }: BlueprintSummaryCardProps) => (
@@ -57,8 +63,14 @@ export const BlueprintSummaryCard = ({
           {entityKindLabels[blueprint.entityKind]}
         </p>
         <p className={metaTextClassName}>
-          {blueprint.gameVersion.major}.{blueprint.gameVersion.minor}.
-          {blueprint.gameVersion.patch}
+          {!isMissingVersion(blueprint.gameVersion) ? (
+            <>
+              v{blueprint.gameVersion.major}.{blueprint.gameVersion.minor}.
+              {blueprint.gameVersion.patch}
+            </>
+          ) : (
+            'Missing Version'
+          )}
         </p>
       </div>
       <p className={metaTextClassName}>
@@ -66,10 +78,14 @@ export const BlueprintSummaryCard = ({
         <span className={metaHighlightClassName}>
           {formatTimeSinceUpload(blueprint.uploadedAt)}
         </span>{' '}
-        ago by{' '}
-        <span className={metaHighlightClassName}>
-          {blueprint.author ?? 'Unknown'}
-        </span>
+        ago
+        {blueprint.author && (
+          <>
+            {' '}
+            by{' '}
+            <span className={metaHighlightClassName}>{blueprint.author}</span>
+          </>
+        )}
       </p>
     </div>
   </div>

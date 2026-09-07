@@ -49,6 +49,7 @@ export const BrowsePagination = ({
         ) : (
           <Button
             aria-current={item === currentPage ? 'page' : undefined}
+            className="font-medium"
             disabled={disabled}
             key={item}
             onClick={() => goToPage(item)}

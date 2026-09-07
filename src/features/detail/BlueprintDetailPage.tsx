@@ -12,6 +12,7 @@ import { FactorioRichText } from '@/shared/components/FactorioRichText';
 import { PageContainer } from '@/shared/components/PageContainer';
 import { SubHeader } from '@/shared/components/SubHeader';
 import { Button } from '@/shared/components/shadcn/button';
+import { surfaceDepthClassName } from '@/shared/components/surfaceDepthClassName';
 import { BlueprintTree } from './BlueprintTree';
 import { CopyBlueprintStringButton } from './CopyBlueprintStringButton';
 import { outlineAccentButtonClassName } from './outlineAccentButtonClassName';
@@ -21,7 +22,7 @@ type BlueprintDetailPageProps = {
   blueprint: BlueprintDetail;
 };
 
-const panelClassName = 'mt-4 rounded-md bg-card p-4';
+const panelClassName = `mt-4 rounded-md border border-border bg-card p-4 ${surfaceDepthClassName}`;
 const sectionHeadingClassName = 'font-semibold text-foreground';
 
 // The tree's root is always the page's own blueprint/book, with its real
@@ -63,7 +64,7 @@ export const BlueprintDetailPage = ({
       </SubHeader>
       <PageContainer>
         <div
-          className={blueprintCardShellClassName}
+          className={`${blueprintCardShellClassName} border border-border`}
           style={{
             viewTransitionName: getBlueprintCardViewTransitionName(
               blueprint.id,

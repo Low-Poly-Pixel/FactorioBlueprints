@@ -21,7 +21,7 @@ export const BrowsePaginationFooter = ({
     className="border-border border-t bg-surface"
     style={{ viewTransitionName: 'browse-footer' }}
   >
-    <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-3">
+    <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-2">
       <BrowsePageSizeSelect disabled={disabled} />
       <BrowsePagination
         currentPage={currentPage}

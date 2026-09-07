@@ -25,7 +25,9 @@ export const BlueprintTreeNodeRow = ({
   isExpanded,
   exportString,
 }: BlueprintTreeNodeRowProps) => (
-  <div className="flex cursor-pointer items-center gap-2 py-1 hover:bg-card">
+  <div
+    className={`flex items-center gap-2 py-1 ${hasChildren ? 'cursor-pointer hover:bg-card' : ''}`}
+  >
     {hasChildren && (
       <ChevronRight
         aria-hidden="true"

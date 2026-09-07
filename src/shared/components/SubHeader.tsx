@@ -9,7 +9,7 @@ export const SubHeader = ({ children }: SubHeaderProps) => (
     className="border-border border-b bg-surface"
     style={{ viewTransitionName: 'sub-header' }}
   >
-    <div className="mx-auto flex max-w-7xl items-center gap-2 px-8 py-4">
+    <div className="mx-auto flex max-w-7xl items-center gap-2 px-8 min-h-14">
       {children}
     </div>
   </div>

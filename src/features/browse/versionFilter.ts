@@ -7,6 +7,7 @@ export type VersionSearchParams = {
   versionMajor?: number;
   versionMinor?: number;
   versionPatch?: number;
+  versionMissing?: boolean;
 };
 
 // Minor/patch only count if every field before them is also selected —
@@ -16,6 +17,10 @@ export type VersionSearchParams = {
 export const getVersionFilterFromSearch = (
   search: VersionSearchParams,
 ): VersionFilter | undefined => {
+  if (search.versionMissing) {
+    return { missing: true };
+  }
+
   if (search.versionMajor === undefined) {
     return undefined;
   }
@@ -43,21 +48,32 @@ export const decodeVersionLine = (
 const isRecordedVersionLine = (major: number, minor: number): boolean =>
   FACTORIO_VERSION_LINES.some(([m, n]) => m === major && n === minor);
 
+// Sentinel dropdown value for the "Missing Version" option — safe from
+// colliding with a real encodeVersionLine() output, since those are always
+// `${number}.${number}`.
+export const MISSING_VERSION_VALUE = 'missing-version';
+
 // Only produces a value when major/minor form an actual recorded Factorio
-// version line. An out-of-range value (e.g. ?versionMajor=3 — a well-typed
-// integer, just not a real version) has no matching dropdown option, and
-// Radix's SelectValue has nothing to render for an unmatched value, so the
-// trigger goes blank instead of falling back to its placeholder. Treating
-// only recognized combos as "selected" keeps the dropdown's visible state
-// (placeholder vs. value, clear button shown vs. hidden) consistent with
-// what's actually a real, selectable option.
+// version line (or the search is filtering for missing-version rows). An
+// out-of-range value (e.g. ?versionMajor=3 — a well-typed integer, just not
+// a real version) has no matching dropdown option, and Radix's SelectValue
+// has nothing to render for an unmatched value, so the trigger goes blank
+// instead of falling back to its placeholder. Treating only recognized
+// combos as "selected" keeps the dropdown's visible state (placeholder vs.
+// value, clear button shown vs. hidden) consistent with what's actually a
+// real, selectable option.
 export const getVersionLineValue = (
   major: number | undefined,
   minor: number | undefined,
-): string | undefined =>
-  major !== undefined && isRecordedVersionLine(major, minor ?? 0)
+  missing?: boolean,
+): string | undefined => {
+  if (missing) {
+    return MISSING_VERSION_VALUE;
+  }
+  return major !== undefined && isRecordedVersionLine(major, minor ?? 0)
     ? encodeVersionLine(major, minor ?? 0)
     : undefined;
+};
 
 // Newest first — the most likely versions to filter by. Major is the
 // primary sort key; ties (e.g. 0.17 vs 0.18) fall through to minor.
@@ -70,13 +86,17 @@ const compareVersionLinesNewestFirst = (
 };
 
 export const versionLineOptions: FilterSelectOption[] = [
-  ...FACTORIO_VERSION_LINES,
-]
-  .sort(compareVersionLinesNewestFirst)
-  .map(([major, minor]) => {
-    const label = encodeVersionLine(major, minor);
-    return { label, value: label };
-  });
+  ...[...FACTORIO_VERSION_LINES]
+    .sort(compareVersionLinesNewestFirst)
+    .map(([major, minor]) => {
+      const label = encodeVersionLine(major, minor);
+      return { label, value: label };
+    }),
+  // Always last — a scan for rows whose version was never set at all (see
+  // VersionFilter's "missing" case), not a real version line, so it doesn't
+  // belong in the newest-first sort above.
+  { label: 'Missing Version', value: MISSING_VERSION_VALUE },
+];
 
 const getUniqueSorted = (values: number[]): number[] =>
   [...new Set(values)].sort((a, b) => b - a);

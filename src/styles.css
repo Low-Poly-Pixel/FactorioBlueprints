@@ -8,25 +8,32 @@
   font-size: 106.25%;
   --radius: 4px;
   /* Palette matched to linear.app's dark theme (their [data-theme=dark] tokens) —
-     accent orange (--primary/--primary-foreground/--chart-3) deliberately left as-is. */
-  --background: oklch(13.9% 0.003 246.256);
+     accent orange (--primary/--primary-foreground) deliberately left as-is. */
+  /* EXPERIMENT: slight blue tint added to every dark neutral surface below
+     (background/card/popover/surface/secondary/muted/accent/sidebar) —
+     same lightness as before, chroma bumped a little and hue standardized
+     to 250 (a true blue; they were already faintly blue-ish, just more so
+     now). Orange accent, semantic status colors, and chart colors are
+     untouched. Revert by restoring the original oklch() values noted
+     alongside each. */
+  --background: oklch(13.9% 0.015 250); /* was oklch(13.9% 0.003 246.256) */
   --foreground: oklch(97.8% 0.001 197.139);
-  --card: oklch(17.2% 0.003 247.98);
+  --card: oklch(17.2% 0.015 250); /* was oklch(17.2% 0.003 247.98) */
   --card-foreground: oklch(97.8% 0.001 197.139);
-  --popover: oklch(19.5% 0.003 247.958);
+  --popover: oklch(19.5% 0.015 250); /* was oklch(19.5% 0.003 247.958) */
   --popover-foreground: oklch(97.8% 0.001 197.139);
   /* Fixed chrome (sub-header, pagination footer) one step up from --card but
      below --accent (the header's own bg) on the elevation ladder —
      linear.app's #141516 (--color-bg-level-2), same tier as --popover. */
-  --surface: oklch(19.5% 0.003 247.958);
+  --surface: oklch(19.5% 0.015 250); /* was oklch(19.5% 0.003 247.958) */
   --surface-foreground: oklch(97.8% 0.001 197.139);
   --primary: oklch(0.787 0.172 69.121);
   --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(21.7% 0.002 247.941);
+  --secondary: oklch(21.7% 0.015 250); /* was oklch(21.7% 0.002 247.941) */
   --secondary-foreground: oklch(97.8% 0.001 197.139);
-  --muted: oklch(22.8% 0.006 285.935);
+  --muted: oklch(22.8% 0.018 250); /* was oklch(22.8% 0.006 285.935) */
   --muted-foreground: oklch(64.9% 0.015 262.359);
-  --accent: oklch(22.8% 0.006 285.935);
+  --accent: oklch(22.8% 0.018 250); /* was oklch(22.8% 0.006 285.935) */
   --accent-foreground: oklch(97.8% 0.001 197.139);
   --destructive: oklch(65.3% 0.183 23.679);
   --info: oklch(71.2% 0.151 249.883);
@@ -35,19 +42,6 @@
   --border: oklch(100% 0 89.876 / 5.1%);
   --input: oklch(100% 0 89.876 / 7.8%);
   --ring: oklch(34.3% 0.003 228.876);
-  --chart-1: oklch(56.7% 0.159 275.206);
-  --chart-2: oklch(71.6% 0.123 208.5);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(63.7% 0.175 146.699);
-  --chart-5: oklch(65.3% 0.183 23.679);
-  --sidebar: oklch(19.5% 0.003 247.958);
-  --sidebar-foreground: oklch(97.8% 0.001 197.139);
-  --sidebar-primary: oklch(56.7% 0.159 275.206);
-  --sidebar-primary-foreground: oklch(97.8% 0.001 197.139);
-  --sidebar-accent: oklch(22.8% 0.006 285.935);
-  --sidebar-accent-foreground: oklch(97.8% 0.001 197.139);
-  --sidebar-border: oklch(100% 0 89.876 / 5.1%);
-  --sidebar-ring: oklch(34.3% 0.003 228.876);
 }
 
 @theme inline {
@@ -79,19 +73,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 @layer base {

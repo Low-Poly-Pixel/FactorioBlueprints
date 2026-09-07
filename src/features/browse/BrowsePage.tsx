@@ -8,6 +8,7 @@ import {
   searchBlueprintsQueryOptions,
 } from '@/api/searchBlueprints.functions';
 import { PageContainer } from '@/shared/components/PageContainer';
+import { surfaceDepthClassName } from '@/shared/components/surfaceDepthClassName';
 import { BlueprintResultCard } from './BlueprintResultCard';
 import { BrowsePaginationFooter } from './BrowsePaginationFooter';
 import { BrowseResultsSkeleton } from './BrowseResultsSkeleton';
@@ -31,7 +32,9 @@ const getResultsSection = (
 ): ReactNode => {
   if (!showSkeleton && results.items.length === 0) {
     return (
-      <div className="rounded-md bg-card p-8 text-center text-muted-foreground">
+      <div
+        className={`rounded-md border border-border bg-card p-8 text-center text-muted-foreground ${surfaceDepthClassName}`}
+      >
         No Results Found
       </div>
     );

@@ -1,10 +1,13 @@
 import type { EntityKind } from '@/shared/blueprint/exportStringDecoder';
 
-export type VersionFilter = {
-  major: number;
-  minor?: number;
-  patch?: number;
-};
+// "missing" is its own case rather than major/minor/patch all set to 0 —
+// 0.0.0 has never been a real Factorio version (even the earliest recorded
+// line is 0.1, see factorioVersionLines.ts), so an all-zero game_version_*
+// row means the export string's own version field was never set for some
+// reason, not that it really is version 0.0.0.
+export type VersionFilter =
+  | { missing: true }
+  | { major: number; minor?: number; patch?: number };
 
 export type BlueprintFilters = {
   entityKind?: EntityKind;
@@ -20,6 +23,13 @@ type SqlCondition = { sql: string; params: (string | number)[] };
 const buildVersionCondition = (
   version: VersionFilter,
 ): { sql: string; params: number[] } => {
+  if ('missing' in version) {
+    return {
+      params: [],
+      sql: 'game_version_major = 0 AND game_version_minor = 0 AND game_version_patch = 0',
+    };
+  }
+
   const columns = [
     'game_version_major',
     'game_version_minor',

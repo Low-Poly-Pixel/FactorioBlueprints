@@ -3,7 +3,10 @@ import { queryOptions } from '@tanstack/react-query';
 import { createServerFn } from '@tanstack/react-start';
 import { resolvePagination } from '@/features/browse/pagination';
 import type { GameVersion } from '@/shared/blueprint/exportStringDecoder';
-import type { BlueprintFilters } from './blueprintConditions.server';
+import type {
+  BlueprintFilters,
+  VersionFilter,
+} from './blueprintConditions.server';
 import { buildBlueprintConditions } from './blueprintConditions.server';
 import type { BlueprintRow, BlueprintSummary } from './blueprintRow.server';
 import { mapBlueprintRow } from './blueprintRow.server';
@@ -64,15 +67,24 @@ export const searchBlueprints = createServerFn({ method: 'GET' })
     };
   });
 
+// Flattened to a single serializable value so the query key stays stable
+// across the union's two shapes ({ missing: true } vs. major/minor/patch).
+const versionQueryKeyPart = (
+  version: VersionFilter | undefined,
+): string | undefined => {
+  if (!version) return undefined;
+  return 'missing' in version
+    ? 'missing'
+    : `${version.major}.${version.minor}.${version.patch}`;
+};
+
 export const searchBlueprintsQueryOptions = (input: SearchBlueprintsInput) =>
   queryOptions({
     queryKey: [
       'blueprints',
       'search',
       input.query,
-      input.version?.major,
-      input.version?.minor,
-      input.version?.patch,
+      versionQueryKeyPart(input.version),
       input.entityKind,
       input.page,
       input.pageSize,
