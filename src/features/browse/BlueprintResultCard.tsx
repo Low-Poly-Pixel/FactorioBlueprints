@@ -15,7 +15,7 @@ export const BlueprintResultCard = ({
 }: BlueprintResultCardProps) => (
   <li>
     <Link
-      className={`block ${blueprintCardShellClassName} transition hover:-translate-y-0.5 hover:bg-[color-mix(in_srgb,var(--card),var(--primary)_20%)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.4)]`}
+      className={`block ${blueprintCardShellClassName} border border-border transition hover:-translate-y-0.5 hover:bg-[color-mix(in_srgb,var(--card),var(--primary)_20%)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.4)]`}
       params={{ id: blueprint.id }}
       style={{
         viewTransitionName: getBlueprintCardViewTransitionName(blueprint.id),

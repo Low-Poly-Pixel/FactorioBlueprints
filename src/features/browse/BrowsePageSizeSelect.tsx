@@ -49,7 +49,7 @@ export const BrowsePageSizeSelect = ({
       >
         <SelectTrigger
           aria-label="Results per page"
-          className={`w-16 ${interactiveFieldClassName}`}
+          className={`w-18 ${interactiveFieldClassName}`}
         >
           <SelectValue />
         </SelectTrigger>

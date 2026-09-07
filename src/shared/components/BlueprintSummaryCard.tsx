@@ -49,7 +49,7 @@ export const BlueprintSummaryCard = ({
       size="card"
     />
     <div className="flex flex-col gap-1 ">
-      <h2 className="font-semibold text-foreground">
+      <h2 className="font-medium text-lg text-foreground">
         <FactorioRichText text={blueprint.title} />
       </h2>
       <div className="flex gap-2">

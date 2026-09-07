@@ -7,40 +7,47 @@
   color-scheme: dark;
   font-size: 106.25%;
   --radius: 4px;
-  --background: oklch(0.1 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
+  /* Palette matched to linear.app's dark theme (their [data-theme=dark] tokens) —
+     accent orange (--primary/--primary-foreground/--chart-3) deliberately left as-is. */
+  --background: oklch(13.9% 0.003 246.256);
+  --foreground: oklch(97.8% 0.001 197.139);
+  --card: oklch(17.2% 0.003 247.98);
+  --card-foreground: oklch(97.8% 0.001 197.139);
+  --popover: oklch(19.5% 0.003 247.958);
+  --popover-foreground: oklch(97.8% 0.001 197.139);
+  /* Fixed chrome (sub-header, pagination footer) one step up from --card but
+     below --accent (the header's own bg) on the elevation ladder —
+     linear.app's #141516 (--color-bg-level-2), same tier as --popover. */
+  --surface: oklch(19.5% 0.003 247.958);
+  --surface-foreground: oklch(97.8% 0.001 197.139);
   --primary: oklch(0.787 0.172 69.121);
   --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.24 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --info: oklch(0.714 0.143 254.624);
-  --success: oklch(0.8 0.182 151.711);
-  --success-foreground: oklch(0.205 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
+  --secondary: oklch(21.7% 0.002 247.941);
+  --secondary-foreground: oklch(97.8% 0.001 197.139);
+  --muted: oklch(22.8% 0.006 285.935);
+  --muted-foreground: oklch(64.9% 0.015 262.359);
+  --accent: oklch(22.8% 0.006 285.935);
+  --accent-foreground: oklch(97.8% 0.001 197.139);
+  --destructive: oklch(65.3% 0.183 23.679);
+  --info: oklch(71.2% 0.151 249.883);
+  --success: oklch(63.7% 0.175 146.699);
+  --success-foreground: oklch(21.455% 0.00156 16.419);
+  --border: oklch(100% 0 89.876 / 5.1%);
+  --input: oklch(100% 0 89.876 / 7.8%);
+  --ring: oklch(34.3% 0.003 228.876);
+  --chart-1: oklch(56.7% 0.159 275.206);
+  --chart-2: oklch(71.6% 0.123 208.5);
   --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --chart-4: oklch(63.7% 0.175 146.699);
+  --chart-5: oklch(65.3% 0.183 23.679);
+  --sidebar: oklch(19.5% 0.003 247.958);
+  --sidebar-foreground: oklch(97.8% 0.001 197.139);
+  --sidebar-primary: oklch(56.7% 0.159 275.206);
+  --sidebar-primary-foreground: oklch(97.8% 0.001 197.139);
+  --sidebar-accent: oklch(22.8% 0.006 285.935);
+  --sidebar-accent-foreground: oklch(97.8% 0.001 197.139);
+  --sidebar-border: oklch(100% 0 89.876 / 5.1%);
+  --sidebar-ring: oklch(34.3% 0.003 228.876);
 }
 
 @theme inline {
@@ -55,6 +62,8 @@
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
@@ -116,4 +125,32 @@
   ::-webkit-scrollbar-thumb:hover {
     background-color: var(--muted-foreground);
   }
+}
+
+/* Browse <-> detail navigation morphs the shared blueprint card/hero via
+   view-transition-name (see getBlueprintCardViewTransitionName) — that's
+   the only animation we actually want. Without this, the browser's default
+   "root" cross-fade also applies to everything else, and since the two
+   pages differ structurally (the detail page's back-button/hero has no
+   counterpart on the browse page, and vice versa for the search/filter
+   bar), that cross-fade visibly overlaps old page content over new page
+   content for several frames instead of a clean cut. Disabling it here
+   makes everything except the named card/hero swap instantly. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* The card/hero morph (see getBlueprintCardViewTransitionName) still
+   animates, and the browser renders every named view-transition-group in
+   its own top layer — which paints above the live document regardless of
+   any z-index we set on the real header.tsx/SubHeader.tsx/
+   BrowsePaginationFooter.tsx elements. Each carries its own
+   view-transition-name specifically so it gets a group here too, and this
+   is what actually keeps them on top of the morphing card for the
+   animation's duration instead of being briefly covered by it. */
+::view-transition-group(site-header),
+::view-transition-group(sub-header),
+::view-transition-group(browse-footer) {
+  z-index: 10;
 }

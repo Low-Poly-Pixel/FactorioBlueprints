@@ -9,6 +9,7 @@ export function getRouter() {
   const router = createTanStackRouter({
     routeTree,
     scrollRestoration: true,
+    scrollToTopSelectors: ['main'],
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 0,
     // Applies to every navigation that doesn't opt out, including

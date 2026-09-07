@@ -3,7 +3,9 @@ import { blueprintCardShellClassName } from '@/shared/components/blueprintCardSh
 const skeletonBlockClassName = 'animate-pulse rounded bg-muted';
 
 const BrowseResultCardSkeleton = () => (
-  <li className={`${blueprintCardShellClassName} flex items-center gap-4`}>
+  <li
+    className={`${blueprintCardShellClassName} flex items-center gap-4 border border-border`}
+  >
     <div className={`size-20 shrink-0 ${skeletonBlockClassName}`} />
     <div className="flex flex-1 flex-col gap-2">
       <div className={`h-5 w-2/5 ${skeletonBlockClassName}`} />
