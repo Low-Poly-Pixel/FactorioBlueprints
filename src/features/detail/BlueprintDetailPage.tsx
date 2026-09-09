@@ -73,24 +73,26 @@ export const BlueprintDetailPage = ({
         >
           <BlueprintSummaryCard blueprint={blueprint} />
         </div>
-        <div className={`${panelClassName} flex gap-2`}>
-          <CopyBlueprintStringButton exportString={blueprint.exportString} />
-          <ViewRawStringButton exportString={blueprint.exportString} />
-        </div>
-        <div className={panelClassName}>
-          <h2 className={sectionHeadingClassName}>Description</h2>
-          <p className="mt-1 text-muted-foreground text-sm">
-            {blueprint.description ? (
-              <FactorioRichText text={blueprint.description} />
-            ) : (
-              'No description provided.'
-            )}
-          </p>
-        </div>
-        <div className={panelClassName}>
-          <h2 className={sectionHeadingClassName}>Contents</h2>
-          <div className="mt-2">
-            <BlueprintTree nodes={getContentsTreeNodes(blueprint)} />
+        <div style={{ viewTransitionName: 'detail-content' }}>
+          <div className={`${panelClassName} flex gap-2`}>
+            <CopyBlueprintStringButton exportString={blueprint.exportString} />
+            <ViewRawStringButton exportString={blueprint.exportString} />
+          </div>
+          <div className={panelClassName}>
+            <h2 className={sectionHeadingClassName}>Description</h2>
+            <p className="mt-1 text-muted-foreground text-sm">
+              {blueprint.description ? (
+                <FactorioRichText text={blueprint.description} />
+              ) : (
+                'No description provided.'
+              )}
+            </p>
+          </div>
+          <div className={panelClassName}>
+            <h2 className={sectionHeadingClassName}>Contents</h2>
+            <div className="mt-2">
+              <BlueprintTree nodes={getContentsTreeNodes(blueprint)} />
+            </div>
           </div>
         </div>
       </PageContainer>
